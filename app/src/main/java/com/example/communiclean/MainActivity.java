@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent registerintent=new Intent(MainActivity.this, RegisterActivity.class);
+                Intent registerintent=new Intent(MainActivity.this, RegistrationActivity.class);
                 startActivity(registerintent);
             }
         });
