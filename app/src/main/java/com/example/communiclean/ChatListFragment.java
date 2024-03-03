@@ -36,7 +36,7 @@ public class ChatListFragment extends Fragment {
     List<ModelChat> chatList;
 
     public ChatListFragment() {
-        // Required empty public constructor
+        // required empty public constructor
     }
 
 
@@ -139,7 +139,7 @@ public class ChatListFragment extends Fragment {
                         }
                     }
                 }
-                adapterChatList.setlastMessageMap(uid, lastmess);
+                adapterChatList.setLastMessageMap(uid, lastmess);
                 adapterChatList.notifyDataSetChanged();
             }
 

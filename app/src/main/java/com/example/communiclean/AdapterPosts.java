@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -42,15 +43,22 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
     Context context;
     String myuid;
-    private DatabaseReference liekeref, postref;
+    final private DatabaseReference likeRef, postRef;
     boolean mprocesslike = false;
 
     public AdapterPosts(Context context, List<ModelPost> modelPosts) {
         this.context = context;
         this.modelPosts = modelPosts;
-        myuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        liekeref = FirebaseDatabase.getInstance().getReference().child("Likes");
-        postref = FirebaseDatabase.getInstance().getReference().child("Posts");
+
+        try {
+            myuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
+        // in case getUid yields a NullPointerException
+        catch (Exception e) {
+
+        }
+        likeRef = FirebaseDatabase.getInstance().getReference().child("Likes");
+        postRef = FirebaseDatabase.getInstance().getReference().child("Posts");
     }
 
     List<ModelPost> modelPosts;
@@ -65,36 +73,41 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
     @Override
     public void onBindViewHolder(@NonNull final MyHolder holder, final int position) {
         final String uid = modelPosts.get(position).getUid();
-        String nameh = modelPosts.get(position).getUname();
-        final String titlee = modelPosts.get(position).getTitle();
-        final String descri = modelPosts.get(position).getDescription();
+        String name = modelPosts.get(position).getUname();
+        final String title = modelPosts.get(position).getTitle();
+        final String description = modelPosts.get(position).getDescription();
         final String ptime = modelPosts.get(position).getPtime();
         String dp = modelPosts.get(position).getUdp();
         String plike = modelPosts.get(position).getPlike();
         final String image = modelPosts.get(position).getUimage();
-        String email = modelPosts.get(position).getUemail();
+        //String email = modelPosts.get(position).getUemail();
         String comm = modelPosts.get(position).getPcomments();
         final String pid = modelPosts.get(position).getPtime();
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
         calendar.setTimeInMillis(Long.parseLong(ptime));
         String timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
-        holder.name.setText(nameh);
-        holder.title.setText(titlee);
-        holder.description.setText(descri);
+        holder.name.setText(name);
+        holder.title.setText(title);
+        holder.description.setText(description);
         holder.time.setText(timedate);
         holder.like.setText(plike + " Likes");
         holder.comments.setText(comm + " Comments");
         setLikes(holder, ptime);
+
         try {
             Glide.with(context).load(dp).into(holder.picture);
-        } catch (Exception e) {
-
         }
+        // if context is empty
+        catch (Exception e) {
+            Log.d("AdapterPosts", "Context was empty when retrieving picture");
+        }
+
         holder.image.setVisibility(View.VISIBLE);
         try {
             Glide.with(context).load(image).into(holder.image);
-        } catch (Exception e) {
-
+        }
+        catch (Exception e) {
+            Log.d("AdapterPosts", "Context was empty when loading picture");
         }
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,18 +123,18 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
                 final int plike = Integer.parseInt(modelPosts.get(position).getPlike());
                 mprocesslike = true;
                 final String postid = modelPosts.get(position).getPtime();
-                liekeref.addValueEventListener(new ValueEventListener() {
+                likeRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                         if (mprocesslike) {
                             if (dataSnapshot.child(postid).hasChild(myuid)) {
-                                postref.child(postid).child("plike").setValue("" + (plike - 1));
-                                liekeref.child(postid).child(myuid).removeValue();
+                                postRef.child(postid).child("plike").setValue("" + (plike - 1));
+                                likeRef.child(postid).child(myuid).removeValue();
                                 mprocesslike = false;
                             } else {
-                                postref.child(postid).child("plike").setValue("" + (plike + 1));
-                                liekeref.child(postid).child(myuid).setValue("Liked");
+                                postRef.child(postid).child("plike").setValue("" + (plike + 1));
+                                likeRef.child(postid).child(myuid).setValue("Liked");
                                 mprocesslike = false;
                             }
                         }
@@ -160,7 +173,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == 0) {
-                    deltewithImage(pid, image);
+                    deleteWithImage(pid, image);
                 }
 
                 return false;
@@ -169,7 +182,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         popupMenu.show();
     }
 
-    private void deltewithImage(final String pid, String image) {
+    private void deleteWithImage(final String pid, String image) {
         final ProgressDialog pd = new ProgressDialog(context);
         pd.setMessage("Deleting");
         StorageReference picref = FirebaseStorage.getInstance().getReferenceFromUrl(image);
@@ -203,7 +216,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
     }
 
     private void setLikes(final MyHolder holder, final String pid) {
-        liekeref.addValueEventListener(new ValueEventListener() {
+        likeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

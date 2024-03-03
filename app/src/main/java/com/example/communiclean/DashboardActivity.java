@@ -71,7 +71,6 @@ public class DashboardActivity extends AppCompatActivity {
                     fragmentTransaction2.commit();
                     return true;
 
-                // TODO: IMPLEMENT CHAT
                 case R.id.nav_chat:
                     actionBar.setTitle("Chats");
                     ChatListFragment listFragment = new ChatListFragment();

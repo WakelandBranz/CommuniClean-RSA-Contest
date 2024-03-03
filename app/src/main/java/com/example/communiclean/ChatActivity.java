@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -70,8 +71,8 @@ public class ChatActivity extends AppCompatActivity {
     private static final int IMAGE_PICKCAMERA_REQUEST = 400;
     private static final int CAMERA_REQUEST = 100;
     private static final int STORAGE_REQUEST = 200;
-    String cameraPermission[];
-    String storagePermission[];
+    String[] cameraPermission;
+    String[] storagePermission;
     Uri imageuri = null;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference users;
@@ -349,7 +350,7 @@ public class ChatActivity extends AppCompatActivity {
                     hashMap.put("receiver", uid);
                     hashMap.put("message", downloadUri);
                     hashMap.put("timestamp", timestamp);
-                    hashMap.put("dilihat", false);
+                    hashMap.put("viewed", false);
                     hashMap.put("type", "images");
                     re.child("Chats").push().setValue(hashMap); // push in firebase using unique id
                     final DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference("ChatList").child(uid).child(myuid);
@@ -417,8 +418,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private Boolean checkStoragePermission() {
-        boolean result = ContextCompat.checkSelfPermission(ChatActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
-        return result;
+        return ContextCompat.checkSelfPermission(ChatActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED);
     }
 
     private void requestStoragePermission() {
@@ -427,7 +427,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void sendmessage(final String message) {
         // creating a reference to store data in firebase
-        // We will be storing data using current time in "Chatlist"
+        // we will be storing data using current time in "ChatList"
         // and we are pushing data using unique id in "Chats"
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String timestamp = String.valueOf(System.currentTimeMillis());
@@ -436,7 +436,7 @@ public class ChatActivity extends AppCompatActivity {
         hashMap.put("receiver", uid);
         hashMap.put("message", message);
         hashMap.put("timestamp", timestamp);
-        hashMap.put("dilihat", false);
+        hashMap.put("viewed", false);
         hashMap.put("type", "text");
         databaseReference.child("Chats").push().setValue(hashMap);
         final DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference("ChatList").child(uid).child(myuid);
@@ -465,7 +465,7 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d("ChatActivity", "Database error in onCancelled occurred!");
             }
         });
     }
@@ -484,6 +484,5 @@ public class ChatActivity extends AppCompatActivity {
         if (user != null) {
             myuid = user.getUid();
         }
-
     }
 }
