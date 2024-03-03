@@ -38,7 +38,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class AdapterPosts extends RecyclerView.Adapter<com.example.communiclean.AdapterPosts.MyHolder> {
+public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
     Context context;
     String myuid;
@@ -63,18 +63,18 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.communiclean.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyHolder holder, final int pos) {
-        final String uid = modelPosts.get(pos).getUid();
-        String nameh = modelPosts.get(pos).getUname();
-        final String titlee = modelPosts.get(pos).getTitle();
-        final String descri = modelPosts.get(pos).getDescription();
-        final String ptime = modelPosts.get(pos).getPtime();
-        String dp = modelPosts.get(pos).getUdp();
-        String plike = modelPosts.get(pos).getPlike();
-        final String image = modelPosts.get(pos).getUimage();
-        String email = modelPosts.get(pos).getUemail();
-        String comm = modelPosts.get(pos).getPcomments();
-        final String pid = modelPosts.get(pos).getPtime();
+    public void onBindViewHolder(@NonNull final MyHolder holder, final int position) {
+        final String uid = modelPosts.get(position).getUid();
+        String nameh = modelPosts.get(position).getUname();
+        final String titlee = modelPosts.get(position).getTitle();
+        final String descri = modelPosts.get(position).getDescription();
+        final String ptime = modelPosts.get(position).getPtime();
+        String dp = modelPosts.get(position).getUdp();
+        String plike = modelPosts.get(position).getPlike();
+        final String image = modelPosts.get(position).getUimage();
+        String email = modelPosts.get(position).getUemail();
+        String comm = modelPosts.get(position).getPcomments();
+        final String pid = modelPosts.get(position).getPtime();
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
         calendar.setTimeInMillis(Long.parseLong(ptime));
         String timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
@@ -87,17 +87,13 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.communiclean.
         setLikes(holder, ptime);
         try {
             Glide.with(context).load(dp).into(holder.picture);
-        }
-        // if context == null
-        catch (Exception e) {
+        } catch (Exception e) {
 
         }
         holder.image.setVisibility(View.VISIBLE);
         try {
             Glide.with(context).load(image).into(holder.image);
-        }
-        // if context == null
-        catch (Exception e) {
+        } catch (Exception e) {
 
         }
         holder.like.setOnClickListener(new View.OnClickListener() {
@@ -111,12 +107,13 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.communiclean.
         holder.likebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final int plike = Integer.parseInt(modelPosts.get(pos).getPlike());
+                final int plike = Integer.parseInt(modelPosts.get(position).getPlike());
                 mprocesslike = true;
-                final String postid = modelPosts.get(pos).getPtime();
+                final String postid = modelPosts.get(position).getPtime();
                 liekeref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                         if (mprocesslike) {
                             if (dataSnapshot.child(postid).hasChild(myuid)) {
                                 postref.child(postid).child("plike").setValue("" + (plike - 1));
@@ -154,6 +151,7 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.communiclean.
     }
 
     private void showMoreOptions(ImageButton more, String uid, String myuid, final String pid, final String image) {
+
         PopupMenu popupMenu = new PopupMenu(context, more, Gravity.END);
         if (uid.equals(myuid)) {
             popupMenu.getMenu().add(Menu.NONE, 0, 0, "DELETE");
@@ -185,9 +183,11 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.communiclean.
                         for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                             dataSnapshot1.getRef().removeValue();
                         }
+
                         pd.dismiss();
                         Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_LONG).show();
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -206,6 +206,7 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.communiclean.
         liekeref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 if (dataSnapshot.child(pid).hasChild(myuid)) {
                     holder.likebtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_liked, 0, 0, 0);
                     holder.likebtn.setText("Liked");
@@ -220,6 +221,7 @@ public class AdapterPosts extends RecyclerView.Adapter<com.example.communiclean.
 
             }
         });
+
     }
 
     @Override

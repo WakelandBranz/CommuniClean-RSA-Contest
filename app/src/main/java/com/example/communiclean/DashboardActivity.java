@@ -46,8 +46,6 @@ public class DashboardActivity extends AppCompatActivity {
         // swaps screens between fragments when selected
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
             switch (menuItem.getItemId()) {
-
-                // TODO: IMPLEMENT HOME
                 case R.id.nav_home:
                     actionBar.setTitle("Home");
                     HomeFragment fragment = new HomeFragment();
@@ -64,7 +62,7 @@ public class DashboardActivity extends AppCompatActivity {
                     fragmentTransaction1.commit();
                     return true;
 
-                // TODO: IMPLEMENT USERS
+
                 case R.id.nav_users:
                     actionBar.setTitle("Users");
                     UsersFragment fragment2 = new UsersFragment();
