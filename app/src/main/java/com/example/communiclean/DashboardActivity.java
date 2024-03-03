@@ -2,6 +2,7 @@ package com.example.communiclean;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -45,49 +46,51 @@ public class DashboardActivity extends AppCompatActivity {
         @Override
         // swaps screens between fragments when selected
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            switch (menuItem.getItemId()) {
-                case R.id.nav_home:
-                    actionBar.setTitle("Home");
-                    HomeFragment fragment = new HomeFragment();
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.content, fragment, "");
-                    fragmentTransaction.commit();
-                    return true;
-
-                case R.id.nav_profile:
-                    actionBar.setTitle("Profile");
-                    ProfileFragment fragment1 = new ProfileFragment();
-                    FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction1.replace(R.id.content, fragment1);
-                    fragmentTransaction1.commit();
-                    return true;
-
-
-                case R.id.nav_users:
-                    actionBar.setTitle("Users");
-                    UsersFragment fragment2 = new UsersFragment();
-                    FragmentTransaction fragmentTransaction2 = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction2.replace(R.id.content, fragment2, "");
-                    fragmentTransaction2.commit();
-                    return true;
-
-                case R.id.nav_chat:
-                    actionBar.setTitle("Chats");
-                    ChatListFragment listFragment = new ChatListFragment();
-                    FragmentTransaction fragmentTransaction3 = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction3.replace(R.id.content, listFragment, "");
-                    fragmentTransaction3.commit();
-                    return true;
-
-                case R.id.nav_addblogs:
-                    actionBar.setTitle("Add Blogs");
-                    AddBlogsFragment fragment4 = new AddBlogsFragment();
-                    FragmentTransaction fragmentTransaction4 = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction4.replace(R.id.content, fragment4, "");
-                    fragmentTransaction4.commit();
-                    return true;
+            final int itemIds = menuItem.getItemId();
+            if (itemIds == R.id.nav_home) {
+                actionBar.setTitle("Home");
+                HomeFragment fragment = new HomeFragment();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.content, fragment, "");
+                fragmentTransaction.commit();
+                return true;
             }
-            return false;
+            else if (itemIds == R.id.nav_profile) {
+                actionBar.setTitle("Profile");
+                ProfileFragment fragment1 = new ProfileFragment();
+                FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction1.replace(R.id.content, fragment1);
+                fragmentTransaction1.commit();
+                return true;
+            }
+            else if (itemIds == R.id.nav_users) {
+                actionBar.setTitle("Users");
+                UsersFragment fragment2 = new UsersFragment();
+                FragmentTransaction fragmentTransaction2 = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction2.replace(R.id.content, fragment2, "");
+                fragmentTransaction2.commit();
+                return true;
+            }
+            else if (itemIds == R.id.nav_chat) {
+                actionBar.setTitle("Chats");
+                ChatListFragment listFragment = new ChatListFragment();
+                FragmentTransaction fragmentTransaction3 = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction3.replace(R.id.content, listFragment, "");
+                fragmentTransaction3.commit();
+                return true;
+            }
+            else if (itemIds == R.id.nav_addblogs) {
+                actionBar.setTitle("Add Blogs");
+                AddBlogsFragment fragment4 = new AddBlogsFragment();
+                FragmentTransaction fragmentTransaction4 = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction4.replace(R.id.content, fragment4, "");
+                fragmentTransaction4.commit();
+                return true;
+            }
+            else {
+                Log.d("DashboardActivity", "Unexpected value: " + menuItem.getItemId());
+                return false;
+            }
         }
     };
 }

@@ -25,7 +25,7 @@
                 android:layout_marginStart="120dp"
                 android:layout_marginTop="50dp"
                 android:textColor="@color/colorBlack"
-                android:id="@+id/welcom"/>
+                android:id="@+id/welcome"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                 android:text="Email"
                 android:layout_marginTop="120dp"
                 android:layout_marginStart="35dp"
-                android:layout_below="@id/welcom"
+                android:layout_below="@id/welcome"
                 android:textColor="@color/colorBlack"
                 android:id="@+id/email"/>
 
@@ -103,7 +103,7 @@
                 android:text="Login"
                 android:textAllCaps="false"
                 android:textSize="24sp"
-                android:background="@drawable/buttonss"
+                android:background="@drawable/buttons"
                 android:textColor="@android:color/background_light"
                 />
 
@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/login_button"
-                android:text="Need new Account?Sign Up Here"
+                android:text="Need a new Account? Sign Up Here!"
                 android:layout_marginTop="20dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="23dp"

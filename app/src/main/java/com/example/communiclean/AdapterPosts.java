@@ -55,7 +55,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         }
         // in case getUid yields a NullPointerException
         catch (Exception e) {
-
+            Log.d("AdapterPosts", "getUid yielded a NullPointerException in AdapterPosts constructor");
         }
         likeRef = FirebaseDatabase.getInstance().getReference().child("Likes");
         postRef = FirebaseDatabase.getInstance().getReference().child("Posts");

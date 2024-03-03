@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "43396603561",
+    "project_id": "communiclean-rsa",
+    "storage_bucket": "communiclean-rsa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43396603561:android:c5ea5be6e9f5aa5da153b8",
+        "android_client_info": {
+          "package_name": "com.example.communiclean"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2UMdFaFox9WsuW5Fn37i9q2LBbYoxMW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

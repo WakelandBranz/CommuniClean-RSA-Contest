@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Patterns;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,9 +44,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Create Account");
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        if (actionBar == null) {
+            Log.d("LoginActivity", "Action bar is null!");
+        }
+        else {
+            actionBar.setTitle("Create New Account");
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         // initialising the layout items
         email = findViewById(R.id.login_email);
@@ -100,18 +107,18 @@ public class LoginActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Recover Password");
         LinearLayout linearLayout = new LinearLayout(this);
-        final EditText emailet = new EditText(this);//write your registered email
-        emailet.setText("Email");
-        emailet.setMinEms(16);
-        emailet.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        linearLayout.addView(emailet);
+        final EditText emailInput = new EditText(this);//write your registered email
+        emailInput.setText("Email");
+        emailInput.setMinEms(16);
+        emailInput.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        linearLayout.addView(emailInput);
         linearLayout.setPadding(10, 10, 10, 10);
         builder.setView(linearLayout);
         builder.setPositiveButton("Recover", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String emaill = emailet.getText().toString().trim();
-                beginRecovery(emaill);//send a mail on the mail to recover password
+                String email = emailInput.getText().toString().trim();
+                beginRecovery(email);//send a mail on the mail to recover password
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -123,13 +130,13 @@ public class LoginActivity extends AppCompatActivity {
         builder.create().show();
     }
 
-    private void beginRecovery(String emaill) {
+    private void beginRecovery(String email) {
         loadingBar.setMessage("Sending Email....");
         loadingBar.setCanceledOnTouchOutside(false);
         loadingBar.show();
 
         // send reset password email
-        mAuth.sendPasswordResetEmail(emaill).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 loadingBar.dismiss();
@@ -148,12 +155,12 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void loginUser(String emaill, String pass) {
+    private void loginUser(String email, String pass) {
         loadingBar.setMessage("Logging In....");
         loadingBar.show();
 
         // sign in with email and password after authenticating
-        mAuth.signInWithEmailAndPassword(emaill, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
@@ -170,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
                         hashMap.put("uid", uid);
                         hashMap.put("name", "");
                         hashMap.put("onlineStatus", "online");
-                        hashMap.put("typingTo", "noOne");
+                        hashMap.put("typingTo", "nobody");
                         hashMap.put("phone", "");
                         hashMap.put("image", "");
                         hashMap.put("cover", "");

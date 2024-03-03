@@ -47,7 +47,7 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder> {
         holder.name.setText(username);
         holder.email.setText(usermail);
         try {
-            Glide.with(context).load(userImage).into(holder.profiletv);
+            Glide.with(context).load(userImage).into(holder.profileTv);
         } catch (Exception e) {
         }
     }
@@ -59,12 +59,12 @@ public class AdapterUsers extends RecyclerView.Adapter<AdapterUsers.MyHolder> {
 
     class MyHolder extends RecyclerView.ViewHolder {
 
-        CircleImageView profiletv;
+        CircleImageView profileTv;
         TextView name, email;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
-            profiletv = itemView.findViewById(R.id.imagep);
+            profileTv = itemView.findViewById(R.id.imagep);
             name = itemView.findViewById(R.id.namep);
             email = itemView.findViewById(R.id.emailp);
         }
