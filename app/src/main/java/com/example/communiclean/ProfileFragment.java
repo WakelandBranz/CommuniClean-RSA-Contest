@@ -41,20 +41,14 @@ public class ProfileFragment extends Fragment {
     FirebaseUser firebaseUser;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
-    ImageView avatartv, covertv;
-    TextView name, email, phone;
+    ImageView profilePicture;
+    TextView name, email;
     RecyclerView postrecycle;
-    StorageReference storageReference;
-    String storagepath = "Users_Profile_Cover_image/";
     FloatingActionButton fab;
     List<ModelPost> posts;
     AdapterPosts adapterPosts;
     String uid;
     ProgressDialog pd;
-
-    String cameraPermission[];
-    String storagePermission[];
-    Uri imageuri;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -70,7 +64,7 @@ public class ProfileFragment extends Fragment {
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
-        avatartv = view.findViewById(R.id.avatartv);
+        profilePicture = view.findViewById(R.id.avatartv);
         name = view.findViewById(R.id.nametv);
         email = view.findViewById(R.id.emailtv);
         uid = FirebaseAuth.getInstance().getUid();
@@ -81,20 +75,21 @@ public class ProfileFragment extends Fragment {
         loadMyPosts();
         pd.setCanceledOnTouchOutside(false);
 
-        // Retrieving user data from firebase
+        // Retrieving user email data from firebase
         Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     String name_s = "" + dataSnapshot1.child("name").getValue();
-                    String emaill = "" + dataSnapshot1.child("email").getValue();
+                    String email_s = "" + dataSnapshot1.child("email").getValue();
                     String image = "" + dataSnapshot1.child("image").getValue();
                     name.setText(name_s);
-                    email.setText(emaill);
+                    email.setText(email_s);
                     try {
-                        Glide.with(getActivity()).load(image).into(avatartv);
-                    } catch (Exception e) {
+                        Glide.with(getActivity()).load(image).into(profilePicture);
+                    }
+                    catch (Exception e) {
 
                     }
                 }

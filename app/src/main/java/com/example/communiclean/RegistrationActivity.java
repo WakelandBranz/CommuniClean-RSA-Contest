@@ -53,17 +53,19 @@ public class RegistrationActivity extends AppCompatActivity {
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String emaill = email.getText().toString().trim();
+                String email_s = email.getText().toString().trim();
                 String uname = name.getText().toString().trim();
                 String pass = password.getText().toString().trim();
-                if (!Patterns.EMAIL_ADDRESS.matcher(emaill).matches()) {
+                if (!Patterns.EMAIL_ADDRESS.matcher(email_s).matches()) {
                     email.setError("Invalid Email");
                     email.setFocusable(true);
-                } else if (pass.length() < 6) {
+                }
+                else if (pass.length() < 6) {
                     password.setError("Length Must be greater than 6 character");
                     password.setFocusable(true);
-                } else {
-                    registerUser(emaill, pass, uname);
+                }
+                else {
+                    registerUser(email_s, pass, uname);
                 }
             }
         });
@@ -100,9 +102,10 @@ public class RegistrationActivity extends AppCompatActivity {
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(mainIntent);
                     finish();
-                } else {
+                }
+                else {
                     progressDialog.dismiss();
-                    Toast.makeText(RegistrationActivity.this, "Error", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegistrationActivity.this, "Error in registering user", Toast.LENGTH_LONG).show();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {

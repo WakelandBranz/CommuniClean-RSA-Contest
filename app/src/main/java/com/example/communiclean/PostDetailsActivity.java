@@ -191,26 +191,28 @@ public class PostDetailsActivity extends AppCompatActivity {
         });
     }
 
+    // for tomorrow: create a function that properly retrieves values and stores them
+    // regarding comments
     private void postComment() {
         progressDialog.setMessage("Adding Comment");
 
-        final String commentss = comment.getText().toString().trim();
-        if (TextUtils.isEmpty(commentss)) {
+        final String commentContent = comment.getText().toString().trim();
+        if (TextUtils.isEmpty(commentContent)) {
             Toast.makeText(PostDetailsActivity.this, "Empty comment", Toast.LENGTH_LONG).show();
             return;
         }
         progressDialog.show();
         String timestamp = String.valueOf(System.currentTimeMillis());
-        DatabaseReference datarf = FirebaseDatabase.getInstance().getReference("Posts").child(postId).child("Comments");
+        DatabaseReference dataRef = FirebaseDatabase.getInstance().getReference("Posts").child(postId).child("Comments");
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("cId", timestamp);
-        hashMap.put("comment", commentss);
+        hashMap.put("comment", commentContent);
         hashMap.put("ptime", timestamp);
         hashMap.put("uid", myUid);
         hashMap.put("uemail", myEmail);
         hashMap.put("udp", myProfilePicture);
         hashMap.put("uname", myUsername);
-        datarf.child(timestamp).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+        dataRef.child(timestamp).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 progressDialog.dismiss();
@@ -306,7 +308,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                     postImage = dataSnapshot1.child("uimage").getValue().toString();
                     //posterUid = dataSnapshot1.child("uid").getValue().toString();
                     //String uemail = dataSnapshot1.child("uemail").getValue().toString();
-                    //posterUsername = dataSnapshot1.child("uname").getValue().toString();
+                    posterUsername = dataSnapshot1.child("uname").getValue().toString();
                     postCreationTime = dataSnapshot1.child("ptime").getValue().toString();
                     postLikes = dataSnapshot1.child("plike").getValue().toString();
                     String commentcount = dataSnapshot1.child("pcomments").getValue().toString();
