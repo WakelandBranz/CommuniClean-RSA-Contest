@@ -290,9 +290,13 @@ public class PostDetailsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    if (dataSnapshot1 == null) {
-                        Log.d("PostDetailsActivity", "DataSnapshot was null when retrieving changed data");
-                        continue;
+                    // If we couldn't properly retrieve a profile picture
+                    if (dataSnapshot1.child("udp").getValue() == null) {
+                        Log.d("PostDetailsActivity", "DataSnapshot poster profile picture was null, setting to anonymous profile picture.");
+                        posterProfilePicture = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
+                    }
+                    else {
+                        posterProfilePicture = dataSnapshot1.child("udp").getValue().toString();
                     }
 
                     // for future reference, this is the structure of our
@@ -300,7 +304,6 @@ public class PostDetailsActivity extends AppCompatActivity {
                     String ptitle = dataSnapshot1.child("title").getValue().toString();
                     String descriptions = dataSnapshot1.child("description").getValue().toString();
                     postImage = dataSnapshot1.child("uimage").getValue().toString();
-                    //posterProfilePicture = dataSnapshot1.child("udp").getValue().toString();
                     //posterUid = dataSnapshot1.child("uid").getValue().toString();
                     //String uemail = dataSnapshot1.child("uemail").getValue().toString();
                     //posterUsername = dataSnapshot1.child("uname").getValue().toString();
@@ -322,6 +325,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                     else {
                         image.setVisibility(View.VISIBLE);
                         // The image the user posted
+
                         try {
                             Glide.with(PostDetailsActivity.this).load(postImage).into(image);
                         }
@@ -331,13 +335,11 @@ public class PostDetailsActivity extends AppCompatActivity {
                     }
                     // Load poster's profile picture
                     try {
-                        Glide.with(PostDetailsActivity.this).load(postImage).into(picture);
+                        Glide.with(PostDetailsActivity.this).load(posterProfilePicture).into(picture);
                     }
                     catch (Exception e) {
                         Log.d("PostDetailsActivity", "Couldn't load poster's profile picture");
                     }
-
-
                 }
             }
 
