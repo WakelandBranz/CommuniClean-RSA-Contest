@@ -41,7 +41,7 @@ import java.util.Locale;
 public class PostDetailsActivity extends AppCompatActivity {
 
 
-    String hisuid, ptime, myuid, myname, myemail, mydp, uimage, postId, plike, hisdp, hisname;
+    String posterUid, postCreationTime, myUid, myUsername, myEmail, myProfilePicture, postImage, postId, postLikes, posterProfilePicture, posterUsername;
     ImageView picture, image;
     TextView name, time, title, description, like, tcomment;
     ImageButton more;
@@ -73,8 +73,8 @@ public class PostDetailsActivity extends AppCompatActivity {
         time = findViewById(R.id.utimeco);
         more = findViewById(R.id.morebtn);
         title = findViewById(R.id.ptitleco);
-        myemail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        myuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        myEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         description = findViewById(R.id.descriptco);
         tcomment = findViewById(R.id.pcommenttv);
         like = findViewById(R.id.plikebco);
@@ -89,7 +89,7 @@ public class PostDetailsActivity extends AppCompatActivity {
 
         loadUserInfo();
         setLikes();
-        actionBar.setSubtitle("SignedInAs:" + myemail);
+        actionBar.setSubtitle("SignedInAs:" + myEmail);
         loadComments();
         sendb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +126,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     ModelComment modelComment = dataSnapshot1.getValue(ModelComment.class);
                     commentList.add(modelComment);
-                    adapterComment = new AdapterComment(getApplicationContext(), commentList, myuid, postId);
+                    adapterComment = new AdapterComment(getApplicationContext(), commentList, myUid, postId);
                     recyclerView.setAdapter(adapterComment);
                 }
             }
@@ -144,7 +144,7 @@ public class PostDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.child(postId).hasChild(myuid)) {
+                if (dataSnapshot.child(postId).hasChild(myUid)) {
                     likebtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_liked, 0, 0, 0);
                     likebtn.setText("Liked");
                 }
@@ -171,14 +171,14 @@ public class PostDetailsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (mlike) {
-                    if (dataSnapshot.child(postId).hasChild(myuid)) {
-                        postref.child(postId).child("plike").setValue("" + (Integer.parseInt(plike) - 1));
-                        liekeref.child(postId).child(myuid).removeValue();
+                    if (dataSnapshot.child(postId).hasChild(myUid)) {
+                        postref.child(postId).child("plike").setValue("" + (Integer.parseInt(postLikes) - 1));
+                        liekeref.child(postId).child(myUid).removeValue();
                         mlike = false;
 
                     } else {
-                        postref.child(postId).child("plike").setValue("" + (Integer.parseInt(plike) + 1));
-                        liekeref.child(postId).child(myuid).setValue("Liked");
+                        postref.child(postId).child("plike").setValue("" + (Integer.parseInt(postLikes) + 1));
+                        liekeref.child(postId).child(myUid).setValue("Liked");
                         mlike = false;
                     }
                 }
@@ -206,10 +206,10 @@ public class PostDetailsActivity extends AppCompatActivity {
         hashMap.put("cId", timestamp);
         hashMap.put("comment", commentss);
         hashMap.put("ptime", timestamp);
-        hashMap.put("uid", myuid);
-        hashMap.put("uemail", myemail);
-        hashMap.put("udp", mydp);
-        hashMap.put("uname", myname);
+        hashMap.put("uid", myUid);
+        hashMap.put("uemail", myEmail);
+        hashMap.put("udp", myProfilePicture);
+        hashMap.put("uname", myUsername);
         datarf.child(timestamp).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -254,14 +254,14 @@ public class PostDetailsActivity extends AppCompatActivity {
     private void loadUserInfo() {
 
         Query myref = FirebaseDatabase.getInstance().getReference("Users");
-        myref.orderByChild("uid").equalTo(myuid).addListenerForSingleValueEvent(new ValueEventListener() {
+        myref.orderByChild("uid").equalTo(myUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    myname = dataSnapshot1.child("name").getValue().toString();
-                    mydp = dataSnapshot1.child("image").getValue().toString();
+                    myUsername = dataSnapshot1.child("name").getValue().toString();
+                    myProfilePicture = dataSnapshot1.child("image").getValue().toString();
                     try {
-                        Glide.with(PostDetailsActivity.this).load(mydp).into(imagep);
+                        Glide.with(PostDetailsActivity.this).load(myProfilePicture).into(imagep);
                     }
                     catch (Exception e) {
 
@@ -299,31 +299,31 @@ public class PostDetailsActivity extends AppCompatActivity {
                     // datasnapshot: https://media.geeksforgeeks.org/wp-content/uploads/20210323183202/Blog.PNG
                     String ptitle = dataSnapshot1.child("title").getValue().toString();
                     String descriptions = dataSnapshot1.child("description").getValue().toString();
-                    uimage = dataSnapshot1.child("uimage").getValue().toString();
-                    //hisdp = dataSnapshot1.child("udp").getValue().toString();
-                    // hisuid = dataSnapshot1.child("uid").getValue().toString();
+                    postImage = dataSnapshot1.child("uimage").getValue().toString();
+                    //posterProfilePicture = dataSnapshot1.child("udp").getValue().toString();
+                    //posterUid = dataSnapshot1.child("uid").getValue().toString();
                     //String uemail = dataSnapshot1.child("uemail").getValue().toString();
-                    //hisname = dataSnapshot1.child("uname").getValue().toString();
-                    ptime = dataSnapshot1.child("ptime").getValue().toString();
-                    plike = dataSnapshot1.child("plike").getValue().toString();
+                    //posterUsername = dataSnapshot1.child("uname").getValue().toString();
+                    postCreationTime = dataSnapshot1.child("ptime").getValue().toString();
+                    postLikes = dataSnapshot1.child("plike").getValue().toString();
                     String commentcount = dataSnapshot1.child("pcomments").getValue().toString();
                     Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
-                    calendar.setTimeInMillis(Long.parseLong(ptime));
+                    calendar.setTimeInMillis(Long.parseLong(postCreationTime));
                     String timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
-                    name.setText(hisname);
+                    name.setText(posterUsername);
                     title.setText(ptitle);
                     description.setText(descriptions);
-                    like.setText(plike + " Likes");
+                    like.setText(postLikes + " Likes");
                     time.setText(timedate);
                     tcomment.setText(commentcount + " Comments");
-                    if (uimage.equals("noImage")) {
+                    if (postImage.equals("noImage")) {
                         image.setVisibility(View.GONE);
                     }
                     else {
                         image.setVisibility(View.VISIBLE);
                         // The image the user posted
                         try {
-                            Glide.with(PostDetailsActivity.this).load(uimage).into(image);
+                            Glide.with(PostDetailsActivity.this).load(postImage).into(image);
                         }
                         catch (Exception e) {
                             Log.d("PostDetailsActivity", "Couldn't load post image");
@@ -331,7 +331,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                     }
                     // Load poster's profile picture
                     try {
-                        Glide.with(PostDetailsActivity.this).load(uimage).into(picture);
+                        Glide.with(PostDetailsActivity.this).load(postImage).into(picture);
                     }
                     catch (Exception e) {
                         Log.d("PostDetailsActivity", "Couldn't load poster's profile picture");
