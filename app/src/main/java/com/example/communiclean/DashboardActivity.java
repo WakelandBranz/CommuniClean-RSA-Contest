@@ -1,5 +1,6 @@
 package com.example.communiclean;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.util.Log;
@@ -16,8 +17,6 @@ import com.google.firebase.auth.FirebaseUser;
 public class DashboardActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
-    String myuid;
     ActionBar actionBar;
     BottomNavigationView navigationView;
 
@@ -27,7 +26,7 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         actionBar = getSupportActionBar();
         actionBar.setTitle("Profile Activity");
-        firebaseAuth = FirebaseAuth.getInstance();
+        //firebaseAuth = FirebaseAuth.getInstance();
 
         navigationView = findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(selectedListener);
@@ -53,14 +52,9 @@ public class DashboardActivity extends AppCompatActivity {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.content, fragment, "");
                 fragmentTransaction.commit();
-                return true;
-            }
-            else if (itemIds == R.id.nav_profile) {
-                actionBar.setTitle("Profile");
-                ProfileFragment fragment1 = new ProfileFragment();
-                FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction1.replace(R.id.content, fragment1);
-                fragmentTransaction1.commit();
+
+                Log.d("DashboardActivity", "User navigated to Home fragment");
+
                 return true;
             }
             else if (itemIds == R.id.nav_users) {
@@ -69,14 +63,8 @@ public class DashboardActivity extends AppCompatActivity {
                 FragmentTransaction fragmentTransaction2 = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction2.replace(R.id.content, fragment2, "");
                 fragmentTransaction2.commit();
-                return true;
-            }
-            else if (itemIds == R.id.nav_chat) {
-                actionBar.setTitle("Chats");
-                ChatListFragment listFragment = new ChatListFragment();
-                FragmentTransaction fragmentTransaction3 = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction3.replace(R.id.content, listFragment, "");
-                fragmentTransaction3.commit();
+
+                Log.d("DashboardActivity", "User navigated to Users fragment");
                 return true;
             }
             else if (itemIds == R.id.nav_addblogs) {
@@ -85,6 +73,35 @@ public class DashboardActivity extends AppCompatActivity {
                 FragmentTransaction fragmentTransaction4 = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction4.replace(R.id.content, fragment4, "");
                 fragmentTransaction4.commit();
+
+                Log.d("DashboardActivity", "User navigated to Add Blogs fragment");
+                return true;
+            }
+            else if (itemIds == R.id.nav_chat) {
+                //actionBar.setTitle("Chats");
+                //ChatListFragment listFragment = new ChatListFragment();
+                //FragmentTransaction fragmentTransaction3 = getSupportFragmentManager().beginTransaction();
+                //fragmentTransaction3.replace(R.id.content, listFragment, "");
+                //fragmentTransaction3.commit();
+
+                // Temporary sign out, uncomment this and click the home button if there are issues
+                // regarding nullifying non-existant users
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+
+                Log.d("DashboardActivity", "User navigated to Chat fragment");
+                return true;
+            }
+            else if (itemIds == R.id.nav_profile) {
+                actionBar.setTitle("Profile");
+                ProfileFragment fragment1 = new ProfileFragment();
+                FragmentTransaction fragmentTransaction1 = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction1.replace(R.id.content, fragment1);
+                fragmentTransaction1.commit();
+
+                Log.d("DashboardActivity", "User navigated to Profile fragment");
                 return true;
             }
             else {

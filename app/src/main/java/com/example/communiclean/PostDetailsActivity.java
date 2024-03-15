@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -99,7 +100,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         likebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                likepost();
+                likePost();
             }
         });
         like.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +147,8 @@ public class PostDetailsActivity extends AppCompatActivity {
                 if (dataSnapshot.child(postId).hasChild(myuid)) {
                     likebtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_liked, 0, 0, 0);
                     likebtn.setText("Liked");
-                } else {
+                }
+                else {
                     likebtn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_like, 0, 0, 0);
                     likebtn.setText("Like");
                 }
@@ -159,7 +161,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void likepost() {
+    private void likePost() {
 
         mlike = true;
         final DatabaseReference liekeref = FirebaseDatabase.getInstance().getReference().child("Likes");
@@ -214,7 +216,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 Toast.makeText(PostDetailsActivity.this, "Added", Toast.LENGTH_LONG).show();
                 comment.setText("");
-                updatecommetcount();
+                updateCommentCount();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -227,7 +229,7 @@ public class PostDetailsActivity extends AppCompatActivity {
 
     boolean count = false;
 
-    private void updatecommetcount() {
+    private void updateCommentCount() {
         count = true;
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts").child(postId);
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -260,7 +262,8 @@ public class PostDetailsActivity extends AppCompatActivity {
                     mydp = dataSnapshot1.child("image").getValue().toString();
                     try {
                         Glide.with(PostDetailsActivity.this).load(mydp).into(imagep);
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
 
                     }
                 }
@@ -273,6 +276,11 @@ public class PostDetailsActivity extends AppCompatActivity {
         });
     }
 
+    private void logDataSnapshot(@NonNull DataSnapshot dataSnapshot) {
+
+    }
+
+
     private void loadPostInfo() {
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Posts");
@@ -282,13 +290,20 @@ public class PostDetailsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    if (dataSnapshot1 == null) {
+                        Log.d("PostDetailsActivity", "DataSnapshot was null when retrieving changed data");
+                        continue;
+                    }
+
+                    // for future reference, this is the structure of our
+                    // datasnapshot: https://media.geeksforgeeks.org/wp-content/uploads/20210323183202/Blog.PNG
                     String ptitle = dataSnapshot1.child("title").getValue().toString();
                     String descriptions = dataSnapshot1.child("description").getValue().toString();
                     uimage = dataSnapshot1.child("uimage").getValue().toString();
-                    hisdp = dataSnapshot1.child("udp").getValue().toString();
+                    //hisdp = dataSnapshot1.child("udp").getValue().toString();
                     // hisuid = dataSnapshot1.child("uid").getValue().toString();
-                    String uemail = dataSnapshot1.child("uemail").getValue().toString();
-                    hisname = dataSnapshot1.child("uname").getValue().toString();
+                    //String uemail = dataSnapshot1.child("uemail").getValue().toString();
+                    //hisname = dataSnapshot1.child("uname").getValue().toString();
                     ptime = dataSnapshot1.child("ptime").getValue().toString();
                     plike = dataSnapshot1.child("plike").getValue().toString();
                     String commentcount = dataSnapshot1.child("pcomments").getValue().toString();
@@ -303,18 +318,23 @@ public class PostDetailsActivity extends AppCompatActivity {
                     tcomment.setText(commentcount + " Comments");
                     if (uimage.equals("noImage")) {
                         image.setVisibility(View.GONE);
-                    } else {
+                    }
+                    else {
                         image.setVisibility(View.VISIBLE);
+                        // The image the user posted
                         try {
                             Glide.with(PostDetailsActivity.this).load(uimage).into(image);
-                        } catch (Exception e) {
-
+                        }
+                        catch (Exception e) {
+                            Log.d("PostDetailsActivity", "Couldn't load post image");
                         }
                     }
+                    // Load poster's profile picture
                     try {
-                        Glide.with(PostDetailsActivity.this).load(hisdp).into(picture);
-                    } catch (Exception e) {
-
+                        Glide.with(PostDetailsActivity.this).load(uimage).into(picture);
+                    }
+                    catch (Exception e) {
+                        Log.d("PostDetailsActivity", "Couldn't load poster's profile picture");
                     }
 
 

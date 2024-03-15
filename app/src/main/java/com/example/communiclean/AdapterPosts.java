@@ -72,6 +72,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final MyHolder holder, final int position) {
+
         final String uid = modelPosts.get(position).getUid();
         String name = modelPosts.get(position).getUname();
         final String title = modelPosts.get(position).getTitle();
@@ -83,6 +84,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         //String email = modelPosts.get(position).getUemail();
         String comm = modelPosts.get(position).getPcomments();
         final String pid = modelPosts.get(position).getPtime();
+
         Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
         calendar.setTimeInMillis(Long.parseLong(ptime));
         String timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
@@ -109,6 +111,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         catch (Exception e) {
             Log.d("AdapterPosts", "Context was empty when loading picture");
         }
+
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +120,15 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
                 holder.itemView.getContext().startActivity(intent);
             }
         });
+
+        //holder.like.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View v) {
+        //        Intent intent = new Intent(holder.itemView.getContext(), PostLikedByActivity.class);
+        //        intent.putExtra("pid", pid);
+        //        holder.itemView.getContext().startActivity(intent);
+        //    }
+        //});
         holder.likebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

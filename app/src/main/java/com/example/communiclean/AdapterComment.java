@@ -2,6 +2,7 @@ package com.example.communiclean;
 
 import android.content.Context;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,8 +59,9 @@ public class AdapterComment extends RecyclerView.Adapter<com.example.communiclea
         holder.comment.setText(comment);
         try {
             Glide.with(context).load(image).into(holder.imagea);
-        } catch (Exception e) {
-
+        }
+        catch (Exception e) {
+            Log.d("AdapterComment", "onBindViewHolder failed: " + e);
         }
     }
 

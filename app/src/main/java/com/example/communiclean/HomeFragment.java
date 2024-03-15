@@ -3,6 +3,7 @@ package com.example.communiclean;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,7 +57,12 @@ public class HomeFragment extends Fragment {
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
         posts = new ArrayList<>();
+        adapterPosts = new AdapterPosts(getActivity(), posts); // this and the line below
+        recyclerView.setAdapter(adapterPosts);
         loadPosts();
+
+        Log.d("OnCreateView", "Created view");
+
         return view;
     }
 
@@ -88,16 +94,43 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 posts.clear();
+                List<ModelPost> tempPosts = new ArrayList<>();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     ModelPost modelPost = dataSnapshot1.getValue(ModelPost.class);
                     if (modelPost.getTitle().toLowerCase().contains(search.toLowerCase()) ||
                             modelPost.getDescription().toLowerCase().contains(search.toLowerCase())) {
-                        posts.add(modelPost);
+                        tempPosts.add(modelPost);
                     }
-                    adapterPosts = new AdapterPosts(getActivity(), posts);
-                    recyclerView.setAdapter(adapterPosts);
-
                 }
+                    posts.addAll(tempPosts);
+                adapterPosts.notifyDataSetChanged();
+                //posts.clear();
+                //List<ModelPost> tempPosts = new ArrayList<>();
+                //for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                //    ModelPost modelPost = dataSnapshot1.getValue(ModelPost.class);
+                //    tempPosts.add(modelPost);
+                //}
+                //posts.addAll(tempPosts);
+                //if (adapterPosts == null) {
+                //    adapterPosts = new AdapterPosts(getActivity(), posts);
+                //    recyclerView.setAdapter(adapterPosts);
+                //}
+                //else {
+                //    adapterPosts.notifyDataSetChanged();
+                //}
+
+                //posts.clear();
+                //
+                //for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                //    ModelPost modelPost = dataSnapshot1.getValue(ModelPost.class);
+                //    if (modelPost.getTitle().toLowerCase().contains(search.toLowerCase()) ||
+                //            modelPost.getDescription().toLowerCase().contains(search.toLowerCase())) {
+                //        posts.add(modelPost);
+                //    }
+                //    adapterPosts = new AdapterPosts(getActivity(), posts);
+                //    recyclerView.setAdapter(adapterPosts);
+//
+                //}
             }
 
             @Override
@@ -114,7 +147,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main_menu, menu);
         MenuItem item = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
@@ -123,7 +156,8 @@ public class HomeFragment extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 if (!TextUtils.isEmpty(query)) {
                     searchPosts(query);
-                } else {
+                }
+                else {
                     loadPosts();
                 }
                 return false;
@@ -133,7 +167,8 @@ public class HomeFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 if (!TextUtils.isEmpty(newText)) {
                     searchPosts(newText);
-                } else {
+                }
+                else {
                     loadPosts();
                 }
                 return false;
@@ -155,5 +190,4 @@ public class HomeFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
-
 }

@@ -111,6 +111,7 @@ public class AdapterChat extends RecyclerView.Adapter<com.example.communiclean.A
 
     private void deleteMsg(int position) {
         final String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         String msgTimestamp = list.get(position).getTimestamp();
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Chats");
         Query query = dbRef.orderByChild("timestamp").equalTo(msgTimestamp);

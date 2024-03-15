@@ -19,26 +19,17 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         mAuth = FirebaseAuth.getInstance();
-        if (mAuth != null) {
-            currentUser = mAuth.getCurrentUser();
-        }
+        currentUser = mAuth.getCurrentUser();
+
+        // Build login activity intent
+        final Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                FirebaseUser user = mAuth.getCurrentUser();
-                // check if the user exists
-                if (user == null) {
-                    Intent intent = new Intent(SplashScreen.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                // user exists, move on from splash screen
-                else {
-                    Intent mainIntent = new Intent(SplashScreen.this, DashboardActivity.class);
-                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(mainIntent);
-                    finish();
-                }
+                // Send us to the LoginActivity
+                startActivity(intent);
+                finish();
             }
         }, 1000);
     }

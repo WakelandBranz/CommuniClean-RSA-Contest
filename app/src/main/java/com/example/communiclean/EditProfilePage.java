@@ -179,7 +179,9 @@ public class EditProfilePage extends AppCompatActivity {
 
                     try {
                         Glide.with(EditProfilePage.this).load(image).into(set);
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
+
                     }
 
                 }
@@ -401,6 +403,7 @@ public class EditProfilePage extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case CAMERA_REQUEST: {
                 if (grantResults.length > 0) {
@@ -408,7 +411,8 @@ public class EditProfilePage extends AppCompatActivity {
                     boolean writeStorageaccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                     if (camera_accepted && writeStorageaccepted) {
                         pickFromCamera();
-                    } else {
+                    }
+                    else {
                         Toast.makeText(this, "Please Enable Camera and Storage Permissions", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -419,7 +423,8 @@ public class EditProfilePage extends AppCompatActivity {
                     boolean writeStorageaccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     if (writeStorageaccepted) {
                         pickFromGallery();
-                    } else {
+                    }
+                    else {
                         Toast.makeText(this, "Please Enable Storage Permissions", Toast.LENGTH_LONG).show();
                     }
                 }

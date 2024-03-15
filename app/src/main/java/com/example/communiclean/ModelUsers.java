@@ -4,6 +4,7 @@ public class ModelUsers {
     String name;
 
     public ModelUsers() {
+        // required constructor
     }
 
     String onlineStatus;

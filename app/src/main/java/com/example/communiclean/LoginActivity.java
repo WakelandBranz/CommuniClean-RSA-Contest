@@ -40,6 +40,24 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     @Override
+    public void onStart() {
+        super.onStart();
+        //Check if user is signed in (non-null) and update UI accordingly
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            Log.d("LoginActivity", "User exists! Logging in " + currentUser.getDisplayName());
+
+
+            Intent intent = new Intent(getApplicationContext(), DashboardActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else {
+            Log.d("LoginActivity", "User is null. Sending to login page.");
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -49,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("LoginActivity", "Action bar is null!");
         }
         else {
-            actionBar.setTitle("Create New Account");
+            actionBar.setTitle("Login");
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -65,23 +83,23 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         // checking if user is null or not
-        if (mAuth != null) {
-            currentUser = mAuth.getCurrentUser();
-        }
+        currentUser = mAuth.getCurrentUser();
+
 
         mlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String emaill = email.getText().toString().trim();
+                String email_s = email.getText().toString().trim();
                 String pass = password.getText().toString().trim();
 
                 // if format of email doesn't matches return null
-                if (!Patterns.EMAIL_ADDRESS.matcher(emaill).matches()) {
+                if (!Patterns.EMAIL_ADDRESS.matcher(email_s).matches()) {
                     email.setError("Invalid Email");
                     email.setFocusable(true);
 
-                } else {
-                    loginUser(emaill, pass);
+                }
+                else {
+                    loginUser(email_s, pass);
                 }
             }
         });
@@ -117,8 +135,8 @@ public class LoginActivity extends AppCompatActivity {
         builder.setPositiveButton("Recover", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String email = emailInput.getText().toString().trim();
-                beginRecovery(email);//send a mail on the mail to recover password
+                String email_s = emailInput.getText().toString().trim();
+                beginRecovery(email_s);//send a mail on the mail to recover password
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -194,7 +212,8 @@ public class LoginActivity extends AppCompatActivity {
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(mainIntent);
                     finish();
-                } else {
+                }
+                else {
                     loadingBar.dismiss();
                     Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
                 }

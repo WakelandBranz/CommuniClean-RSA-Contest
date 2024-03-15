@@ -42,7 +42,7 @@ public class ProfileFragment extends Fragment {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     ImageView avatartv, covertv;
-    TextView nam, email, phone;
+    TextView name, email, phone;
     RecyclerView postrecycle;
     StorageReference storageReference;
     String storagepath = "Users_Profile_Cover_image/";
@@ -51,10 +51,7 @@ public class ProfileFragment extends Fragment {
     AdapterPosts adapterPosts;
     String uid;
     ProgressDialog pd;
-    private static final int CAMERA_REQUEST = 100;
-    private static final int STORAGE_REQUEST = 200;
-    private static final int IMAGEPICK_GALLERY_REQUEST = 300;
-    private static final int IMAGE_PICKCAMERA_REQUEST = 400;
+
     String cameraPermission[];
     String storagePermission[];
     Uri imageuri;
@@ -74,7 +71,7 @@ public class ProfileFragment extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
         avatartv = view.findViewById(R.id.avatartv);
-        nam = view.findViewById(R.id.nametv);
+        name = view.findViewById(R.id.nametv);
         email = view.findViewById(R.id.emailtv);
         uid = FirebaseAuth.getInstance().getUid();
         fab = view.findViewById(R.id.fab);
@@ -90,10 +87,10 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    String name = "" + dataSnapshot1.child("name").getValue();
+                    String name_s = "" + dataSnapshot1.child("name").getValue();
                     String emaill = "" + dataSnapshot1.child("email").getValue();
                     String image = "" + dataSnapshot1.child("image").getValue();
-                    nam.setText(name);
+                    name.setText(name_s);
                     email.setText(emaill);
                     try {
                         Glide.with(getActivity()).load(image).into(avatartv);
