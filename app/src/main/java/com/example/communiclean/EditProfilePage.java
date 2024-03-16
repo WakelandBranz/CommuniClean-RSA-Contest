@@ -1,5 +1,7 @@
 package com.example.communiclean;
 
+import static java.security.AccessController.getContext;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
@@ -85,6 +89,7 @@ public class EditProfilePage extends AppCompatActivity {
         databaseReference = firebaseDatabase.getReference("Users");
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        // Get our user from /users/ by email
         Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -95,7 +100,8 @@ public class EditProfilePage extends AppCompatActivity {
 
                     try {
                         Glide.with(EditProfilePage.this).load(image).into(set);
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
                     }
                 }
             }
@@ -110,7 +116,7 @@ public class EditProfilePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pd.setMessage("Changing Password");
-                showPasswordChangeDailog();
+                showPasswordChangeDialog();
             }
         });
 
@@ -127,7 +133,7 @@ public class EditProfilePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pd.setMessage("Updating Name");
-                showNamephoneupdate("name");
+                updateUsername("name");
             }
         });
     }
@@ -161,7 +167,7 @@ public class EditProfilePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pd.setMessage("Changing Password");
-                showPasswordChangeDailog();
+                showPasswordChangeDialog();
             }
         });
     }
@@ -196,7 +202,7 @@ public class EditProfilePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pd.setMessage("Changing Password");
-                showPasswordChangeDailog();
+                showPasswordChangeDialog();
             }
         });
     }
@@ -225,10 +231,10 @@ public class EditProfilePage extends AppCompatActivity {
     }
 
     // We will show an alert box where we will write our old and new password
-    private void showPasswordChangeDailog() {
+    private void showPasswordChangeDialog() {
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_update_password, null);
-        final EditText oldpass = view.findViewById(R.id.oldpasslog);
-        final EditText newpass = view.findViewById(R.id.newpasslog);
+        final EditText oldPassword = view.findViewById(R.id.oldpasslog);
+        final EditText newPassword = view.findViewById(R.id.newpasslog);
         Button editpass = view.findViewById(R.id.updatepass);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(view);
@@ -237,18 +243,18 @@ public class EditProfilePage extends AppCompatActivity {
         editpass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String oldp = oldpass.getText().toString().trim();
-                String newp = newpass.getText().toString().trim();
-                if (TextUtils.isEmpty(oldp)) {
+                String oldPassword_s = oldPassword.getText().toString().trim();
+                String newPassword_s = newPassword.getText().toString().trim();
+                if (TextUtils.isEmpty(oldPassword_s)) {
                     Toast.makeText(EditProfilePage.this, "Current Password cant be empty", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if (TextUtils.isEmpty(newp)) {
+                if (TextUtils.isEmpty(newPassword_s)) {
                     Toast.makeText(EditProfilePage.this, "New Password cant be empty", Toast.LENGTH_LONG).show();
                     return;
                 }
                 dialog.dismiss();
-                updatePassword(oldp, newp);
+                updatePassword(oldPassword_s, newPassword_s);
             }
         });
     }
@@ -274,7 +280,7 @@ public class EditProfilePage extends AppCompatActivity {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         pd.dismiss();
-                                        Toast.makeText(EditProfilePage.this, "Failed", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(EditProfilePage.this, "Failed to update password", Toast.LENGTH_LONG).show();
                                     }
                                 });
                     }
@@ -282,22 +288,22 @@ public class EditProfilePage extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         pd.dismiss();
-                        Toast.makeText(EditProfilePage.this, "Failed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditProfilePage.this, "Failed to update password", Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
     // Updating name
-    private void showNamephoneupdate(final String key) {
+    private void updateUsername(final String key) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Update" + key);
+        builder.setTitle("Update your user" + key);
 
         // creating a layout to write the new name
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(10, 10, 10, 10);
         final EditText editText = new EditText(this);
-        editText.setHint("Enter" + key);
+        editText.setHint("Enter " + key);
         layout.addView(editText);
         builder.setView(layout);
 
@@ -327,13 +333,14 @@ public class EditProfilePage extends AppCompatActivity {
                         }
                     });
                     if (key.equals("name")) {
-                        final DatabaseReference databaser = FirebaseDatabase.getInstance().getReference("Posts");
-                        Query query = databaser.orderByChild("uid").equalTo(uid);
+                        // Get our database reference and user to modify for all posts.
+                        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Posts");
+                        Query query = databaseReference.orderByChild("uid").equalTo(uid);
                         query.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                                    String child = databaser.getKey();
+                                    String child = databaseReference.getKey();
                                     dataSnapshot1.getRef().child("uname").setValue(value);
                                 }
                             }
@@ -344,8 +351,9 @@ public class EditProfilePage extends AppCompatActivity {
                             }
                         });
                     }
-                } else {
-                    Toast.makeText(EditProfilePage.this, "Unable to update", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(EditProfilePage.this, "ERROR: Unable to update", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -407,9 +415,9 @@ public class EditProfilePage extends AppCompatActivity {
         switch (requestCode) {
             case CAMERA_REQUEST: {
                 if (grantResults.length > 0) {
-                    boolean camera_accepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    boolean writeStorageaccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    if (camera_accepted && writeStorageaccepted) {
+                    boolean cameraGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+
+                    if (cameraGranted) {
                         pickFromCamera();
                     }
                     else {

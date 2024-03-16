@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,6 +41,8 @@ public class HomeFragment extends Fragment {
     RecyclerView recyclerView;
     List<ModelPost> posts;
     AdapterPosts adapterPosts;
+
+    String posterName, posterProfilePicture;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -74,15 +77,41 @@ public class HomeFragment extends Fragment {
                 posts.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     ModelPost modelPost = dataSnapshot1.getValue(ModelPost.class);
-                    posts.add(modelPost);
-                    adapterPosts = new AdapterPosts(getActivity(), posts);
-                    recyclerView.setAdapter(adapterPosts);
+                    fetchAndLoadPosterData(modelPost);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getActivity(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void fetchAndLoadPosterData(final ModelPost modelPost) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(modelPost.getUid());
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    posterProfilePicture = dataSnapshot.child("image").getValue(String.class);
+                    posterName = dataSnapshot.child("name").getValue(String.class);
+                } else {
+                    posterName = "You should never see me, please contact support@apple.com";
+                    posterProfilePicture = "https://media.istockphoto.com/id/943008240/vector/window-operating-system-error-warning-illustration-on-white-isolated-background.jpg?s=612x612&w=0&k=20&c=YC9uciN0ixxkVlRqS5q01hE166kD41_O_QgRs8cvfEo=";
+                }
+
+                modelPost.setUname(posterName);
+                modelPost.setUdp(posterProfilePicture);
+                posts.add(modelPost);
+                adapterPosts = new AdapterPosts(getActivity(), posts);
+                recyclerView.setAdapter(adapterPosts);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle the error case
+                Log.e("AddBlogsFragment", "Error retrieving user image: " + databaseError.getMessage());
             }
         });
     }

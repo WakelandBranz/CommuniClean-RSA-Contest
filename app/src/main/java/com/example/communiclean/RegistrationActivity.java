@@ -77,9 +77,9 @@ public class RegistrationActivity extends AppCompatActivity {
         });
     }
 
-    private void registerUser(String emaill, final String pass, final String uname) {
+    private void registerUser(String email, final String pass, final String uname) {
         progressDialog.show();
-        mAuth.createUserWithEmailAndPassword(emaill, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
@@ -87,16 +87,21 @@ public class RegistrationActivity extends AppCompatActivity {
                     FirebaseUser user = mAuth.getCurrentUser();
                     String email = user.getEmail();
                     String uid = user.getUid();
+
+                    // Data to add into FireBase
                     HashMap<Object, String> hashMap = new HashMap<>();
                     hashMap.put("email", email);
                     hashMap.put("uid", uid);
                     hashMap.put("name", uname);
                     hashMap.put("onlineStatus", "online");
                     hashMap.put("typingTo", "noOne");
-                    hashMap.put("image", "");
+                    hashMap.put("image", "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg");
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference reference = database.getReference("Users");
+
+                    // Add into database /users/uid/
                     reference.child(uid).setValue(hashMap);
+
                     Toast.makeText(RegistrationActivity.this, "Registered User " + user.getEmail(), Toast.LENGTH_LONG).show();
                     Intent mainIntent = new Intent(RegistrationActivity.this, DashboardActivity.class);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -105,7 +110,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
                 else {
                     progressDialog.dismiss();
-                    Toast.makeText(RegistrationActivity.this, "Error in registering user", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegistrationActivity.this, "Error in registering user " + uname, Toast.LENGTH_LONG).show();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {

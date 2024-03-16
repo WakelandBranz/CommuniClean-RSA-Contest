@@ -114,7 +114,6 @@ public class PostDetailsActivity extends AppCompatActivity {
     }
 
     private void loadComments() {
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         commentList = new ArrayList<>();
@@ -125,15 +124,43 @@ public class PostDetailsActivity extends AppCompatActivity {
                 commentList.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     ModelComment modelComment = dataSnapshot1.getValue(ModelComment.class);
-                    commentList.add(modelComment);
-                    adapterComment = new AdapterComment(getApplicationContext(), commentList, myUid, postId);
-                    recyclerView.setAdapter(adapterComment);
+                    fetchAndLoadCommenterData(modelComment);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    private void fetchAndLoadCommenterData(final ModelComment modelComment) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(modelComment.getUid());
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String commenterProfilePicture = dataSnapshot.child("image").getValue(String.class);
+                    String commenterName = dataSnapshot.child("name").getValue(String.class);
+
+                    modelComment.setUdp(commenterProfilePicture);
+                    modelComment.setUname(commenterName);
+                }
+                else {
+                    modelComment.setUname("You shouldn't be seeing this.");
+                    modelComment.setUdp("https://media.istockphoto.com/id/943008240/vector/window-operating-system-error-warning-illustration-on-white-isolated-background.jpg?s=612x612&w=0&k=20&c=YC9uciN0ixxkVlRqS5q01hE166kD41_O_QgRs8cvfEo=");
+                }
+
+                commentList.add(modelComment);
+                adapterComment = new AdapterComment(getApplicationContext(), commentList, myUid, postId);
+                recyclerView.setAdapter(adapterComment);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle the error case
+                Log.e("PostDetailsActivity", "Error retrieving commenter data: " + databaseError.getMessage());
             }
         });
     }
@@ -210,8 +237,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         hashMap.put("ptime", timestamp);
         hashMap.put("uid", myUid);
         hashMap.put("uemail", myEmail);
-        hashMap.put("udp", myProfilePicture);
-        hashMap.put("uname", myUsername);
+
         dataRef.child(timestamp).setValue(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -278,11 +304,46 @@ public class PostDetailsActivity extends AppCompatActivity {
         });
     }
 
+    private void fetchAndLoadPosterData(String uid) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    posterProfilePicture = dataSnapshot.child("image").getValue(String.class);;
+                    posterUsername = dataSnapshot.child("name").getValue(String.class);;
+
+                    name.setText(posterUsername);
+
+                    // Load poster's profile picture
+                    try {
+                        Glide.with(PostDetailsActivity.this).load(posterProfilePicture).into(picture);
+                    }
+                    catch (Exception e) {
+                        Log.d("PostDetailsActivity", "Couldn't load poster's profile picture");
+                    }
+                }
+                else {
+                    posterProfilePicture = "";
+                }
+                Log.d("fetchUserData", "Image: " + posterProfilePicture +
+                        "Username: " + posterUsername);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle the error case
+                Log.e("AddBlogsFragment", "Error retrieving user image: " + databaseError.getMessage());
+            }
+        });
+    }
+
     private void logDataSnapshot(@NonNull DataSnapshot dataSnapshot) {
 
     }
 
-
+    // This is loaded when a user clicks on a post to load the comments or
+    // make the post bigger on their device
     private void loadPostInfo() {
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Posts");
@@ -291,31 +352,28 @@ public class PostDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                // Retrieve data from post using postId
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    // If we couldn't properly retrieve a profile picture
-                    if (dataSnapshot1.child("udp").getValue() == null) {
-                        Log.d("PostDetailsActivity", "DataSnapshot poster profile picture was null, setting to anonymous profile picture.");
-                        posterProfilePicture = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
-                    }
-                    else {
-                        posterProfilePicture = dataSnapshot1.child("udp").getValue().toString();
-                    }
-
                     // for future reference, this is the structure of our
                     // datasnapshot: https://media.geeksforgeeks.org/wp-content/uploads/20210323183202/Blog.PNG
                     String ptitle = dataSnapshot1.child("title").getValue().toString();
                     String descriptions = dataSnapshot1.child("description").getValue().toString();
                     postImage = dataSnapshot1.child("uimage").getValue().toString();
-                    //posterUid = dataSnapshot1.child("uid").getValue().toString();
+                    posterUid = dataSnapshot1.child("uid").getValue().toString();
                     //String uemail = dataSnapshot1.child("uemail").getValue().toString();
-                    posterUsername = dataSnapshot1.child("uname").getValue().toString();
+                    //posterUsername = dataSnapshot1.child("uname").getValue().toString();
                     postCreationTime = dataSnapshot1.child("ptime").getValue().toString();
                     postLikes = dataSnapshot1.child("plike").getValue().toString();
                     String commentcount = dataSnapshot1.child("pcomments").getValue().toString();
                     Calendar calendar = Calendar.getInstance(Locale.ENGLISH);
                     calendar.setTimeInMillis(Long.parseLong(postCreationTime));
                     String timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
-                    name.setText(posterUsername);
+
+                    // Get profile picture
+                    fetchAndLoadPosterData(posterUid);
+
+                    Log.d("test", "" + posterUsername);
+                    //name.setText(posterUsername);
                     title.setText(ptitle);
                     description.setText(descriptions);
                     like.setText(postLikes + " Likes");
@@ -336,12 +394,12 @@ public class PostDetailsActivity extends AppCompatActivity {
                         }
                     }
                     // Load poster's profile picture
-                    try {
-                        Glide.with(PostDetailsActivity.this).load(posterProfilePicture).into(picture);
-                    }
-                    catch (Exception e) {
-                        Log.d("PostDetailsActivity", "Couldn't load poster's profile picture");
-                    }
+                    //try {
+                    //    Glide.with(PostDetailsActivity.this).load(posterProfilePicture).into(picture);
+                    //}
+                    //catch (Exception e) {
+                    //    Log.d("PostDetailsActivity", "Couldn't load poster's profile picture");
+                    //}
                 }
             }
 

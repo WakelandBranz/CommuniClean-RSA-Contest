@@ -28,10 +28,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -87,13 +89,37 @@ public class AddBlogsFragment extends Fragment {
         // Retrieving the user data name, email and profile pic using query
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
         Query query = databaseReference.orderByChild("email").equalTo(email);
+
+        // Retrieving the user data name, email, and uid using FirebaseAuth
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            uid = currentUser.getUid();
+        }
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    name = dataSnapshot.child("name").getValue(String.class);
+                    email = dataSnapshot.child("email").getValue(String.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle the error case
+                Log.e("AddBlogsFragment", "Error retrieving user name: " + databaseError.getMessage());
+            }
+        });
+
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     name = "" + dataSnapshot1.child("name").getValue().toString();
-                    email = "" + dataSnapshot1.child("email").getValue();
-                    udp = "" + dataSnapshot1.child("image").getValue().toString();
                 }
             }
 
@@ -193,30 +219,14 @@ public class AddBlogsFragment extends Fragment {
             case CAMERA_REQUEST: {
                 if (grantResults.length > 0) {
 
-                    // Testing
-                    if (ContextCompat.checkSelfPermission(this.getContext(),
-                            Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED); {
-                                boolean cameraPermissionGranted = false;
-                                if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), Manifest.permission.CAMERA)) {
-                                    shouldShowRequestPermissionRationale(Manifest.permission.CAMERA);
-                                    Toast.makeText(getContext(), "Please Enable Camera and Storage Permissions", Toast.LENGTH_LONG).show();
-                                }
-                                else {
-                                    ActivityCompat.requestPermissions(this.getActivity(), new String[]{ Manifest.permission.CAMERA },
-                                            CAMERA_REQUEST);
-                                    pickFromCamera();
-                                }
+                    boolean cameraGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+
+                    if (cameraGranted) {
+                        pickFromCamera();
                     }
-
-                    //boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    //boolean writeStorageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-
-                    // if request access given the pick data
-                    //if (cameraAccepted && writeStorageAccepted) {
-                    //    pickFromCamera();
-                    //} else {
-                    //    Toast.makeText(getContext(), "Please Enable Camera and Storage Permissions", Toast.LENGTH_LONG).show();
-                    //}
+                    else {
+                        Toast.makeText(this.getActivity(), "Please Enable Camera and Storage Permissions", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
 
@@ -227,7 +237,7 @@ public class AddBlogsFragment extends Fragment {
                     boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
 
                     // if the user grants the app permission to parse data from their storage
-                    if (writeStorageAccepted) {
+                    if (true) {
                         pickFromGallery();
                     } else {
                         Toast.makeText(getContext(), "Please Enable Storage Permissions", Toast.LENGTH_LONG).show();
@@ -303,10 +313,11 @@ public class AddBlogsFragment extends Fragment {
                 if (uriTask.isSuccessful()) {
                     // If the task is successful, update the data into firebase
                     HashMap<Object, String> hashMap = new HashMap<>();
-                    //hashMap.put("uid", uid);
+                    Log.d("test", "" + uid);
+                    hashMap.put("uid", uid);
                     //hashMap.put("uname", name);
                     //hashMap.put("uemail", email);
-                    //hashMap.put("udp", udp);
+                    hashMap.put("udp", udp);
                     hashMap.put("title", title_s); // post title
                     hashMap.put("description", description); // post description
                     hashMap.put("uimage", downloadUri); // url to stored image in firebase

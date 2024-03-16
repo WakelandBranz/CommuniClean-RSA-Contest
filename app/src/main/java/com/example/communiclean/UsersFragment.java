@@ -81,7 +81,7 @@ public class UsersFragment extends Fragment {
         });
     }
 
-    private void searchusers(final String s) {
+    private void searchUsers(final String s) {
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.addValueEventListener(new ValueEventListener() {
@@ -126,7 +126,7 @@ public class UsersFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (!TextUtils.isEmpty(query.trim())) {
-                    searchusers(query);
+                    searchUsers(query);
                 } else {
                     getAllUsers();
                 }
@@ -136,7 +136,7 @@ public class UsersFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (!TextUtils.isEmpty(newText.trim())) {
-                    searchusers(newText);
+                    searchUsers(newText);
                 } else {
                     getAllUsers();
                 }
