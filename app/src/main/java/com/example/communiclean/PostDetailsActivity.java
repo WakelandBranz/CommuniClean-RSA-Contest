@@ -334,6 +334,8 @@ public class PostDetailsActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle the error case
                 Log.e("AddBlogsFragment", "Error retrieving user image: " + databaseError.getMessage());
+                Toast.makeText(PostDetailsActivity.this, "Error retrieving user image" +
+                        databaseError.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -345,7 +347,6 @@ public class PostDetailsActivity extends AppCompatActivity {
     // This is loaded when a user clicks on a post to load the comments or
     // make the post bigger on their device
     private void loadPostInfo() {
-
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Posts");
         Query query = databaseReference.orderByChild("ptime").equalTo(postId);
         query.addValueEventListener(new ValueEventListener() {
@@ -354,14 +355,10 @@ public class PostDetailsActivity extends AppCompatActivity {
 
                 // Retrieve data from post using postId
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    // for future reference, this is the structure of our
-                    // datasnapshot: https://media.geeksforgeeks.org/wp-content/uploads/20210323183202/Blog.PNG
                     String ptitle = dataSnapshot1.child("title").getValue().toString();
                     String descriptions = dataSnapshot1.child("description").getValue().toString();
                     postImage = dataSnapshot1.child("uimage").getValue().toString();
                     posterUid = dataSnapshot1.child("uid").getValue().toString();
-                    //String uemail = dataSnapshot1.child("uemail").getValue().toString();
-                    //posterUsername = dataSnapshot1.child("uname").getValue().toString();
                     postCreationTime = dataSnapshot1.child("ptime").getValue().toString();
                     postLikes = dataSnapshot1.child("plike").getValue().toString();
                     String commentcount = dataSnapshot1.child("pcomments").getValue().toString();
@@ -372,7 +369,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                     // Get profile picture
                     fetchAndLoadPosterData(posterUid);
 
-                    Log.d("test", "" + posterUsername);
+                    Log.d("PostDetailsActivity", "Loading post info from " + posterUsername);
                     //name.setText(posterUsername);
                     title.setText(ptitle);
                     description.setText(descriptions);
@@ -384,8 +381,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                     }
                     else {
                         image.setVisibility(View.VISIBLE);
-                        // The image the user posted
-
+                        // Load the image the user posted
                         try {
                             Glide.with(PostDetailsActivity.this).load(postImage).into(image);
                         }
@@ -393,19 +389,13 @@ public class PostDetailsActivity extends AppCompatActivity {
                             Log.d("PostDetailsActivity", "Couldn't load post image");
                         }
                     }
-                    // Load poster's profile picture
-                    //try {
-                    //    Glide.with(PostDetailsActivity.this).load(posterProfilePicture).into(picture);
-                    //}
-                    //catch (Exception e) {
-                    //    Log.d("PostDetailsActivity", "Couldn't load poster's profile picture");
-                    //}
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(PostDetailsActivity.this, "Empty comment -> " +
+                        databaseError.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

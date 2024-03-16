@@ -6,10 +6,11 @@
     <color name="colorAccent">#31572c</color>
     <color name="colorBlack">#000000</color>
     <color name="colorGray">#4c544c</color>
-    <color name="colorGray02">#667266</color>
+    <color name="colorLightGray">#667266</color>
     <color name="colorWhite">#ffffff</color>
-    <color name="colorRed">#F4511E</color>
     <color name="colorGreen">#17581A</color>
+
+
     <color name="btnRed">#E61313</color>
     <color name="btnedit">#2CA7E0</color>
     <color name="neutral">#0a1b97</color>
@@ -17,4 +18,7 @@
 
     <color name="buttonColor">#87ac8e</color>
     <color name="iconColor">#000000</color>
+    <color name="editColor">#dddddd</color>
+
+    <color name="editTextColor">#ffffff</color>
 </resources>

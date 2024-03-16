@@ -4,11 +4,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/colorWhite"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
     app:contentPadding="5dp"
     app:cardUseCompatPadding="true"
-    app:cardBackgroundColor="@color/colorWhite"
+    app:cardBackgroundColor="@color/colorGray"
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -82,16 +83,16 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/plikeb"
                 android:layout_weight="1"
-                android:textColor="@color/colorPrimary"
-                android:text="1.2K Likes"/>
+                android:textColor="@color/colorWhite"
+                android:text="0 Like(s)"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/pcommentco"
                 android:layout_weight="1"
                 android:textAlignment="textEnd"
-                android:textColor="@color/colorPrimary"
-                android:text="1.2K Comment"/>
+                android:textColor="@color/colorWhite"
+                android:text="0 Comment(s)"/>
         </LinearLayout>
 
 <View

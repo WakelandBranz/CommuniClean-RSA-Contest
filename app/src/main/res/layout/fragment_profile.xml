@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#F1EDED"
+    android:background="@color/colorGray"
     android:layout_height="match_parent"
     tools:context=".ProfileFragment">
 
@@ -13,25 +13,21 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                android:id="@+id/cavertv"
+                android:id="@+id/banner"
                 android:scaleType="fitXY"
-                android:background="@color/colorPrimaryDark">
-
-
-            </ImageView>
+                android:background="@color/colorPrimaryDark"/>
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:layout_marginTop="100dp"
                 android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:id="@+id/avatartv"
-                    android:src="@drawable/ic_images"
-                    android:background="@color/colorPrimary"
-                    android:padding="5dp"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:id="@+id/profile_picture"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/profile_image"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginStart="20dp"/>
                 <LinearLayout
@@ -40,19 +36,19 @@
                     android:background="#77000000"
                     android:orientation="vertical">
                     <TextView
+                        android:id="@+id/username"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:id="@+id/nametv"
                         android:layout_marginTop="5dp"
                         android:textSize="25sp"
                         android:textColor="@color/colorWhite"
                         android:layout_marginLeft="5dp"/>
                     <TextView
+                        android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
-                        android:id="@+id/emailtv"
                         android:textColor="@color/colorWhite"
                         android:layout_marginLeft="5dp"/>
                 </LinearLayout>
@@ -64,21 +60,21 @@
         android:layout_below="@+id/r1"
         android:layout_height="wrap_content">
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerposts"
+            android:id="@+id/recycler_posts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/linearLayout"/>
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit_profile_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/fab"
         android:src="@drawable/ic_edit_white"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="10dp"
         android:layout_alignParentRight="true"
-        android:contentDescription="test" />
+        android:contentDescription="Edit your profile data" />
 
 </RelativeLayout>

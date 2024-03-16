@@ -313,10 +313,7 @@ public class AddBlogsFragment extends Fragment {
                 if (uriTask.isSuccessful()) {
                     // If the task is successful, update the data into firebase
                     HashMap<Object, String> hashMap = new HashMap<>();
-                    Log.d("test", "" + uid);
-                    hashMap.put("uid", uid);
-                    //hashMap.put("uname", name);
-                    //hashMap.put("uemail", email);
+                    hashMap.put("uid", uid);;
                     hashMap.put("udp", udp);
                     hashMap.put("title", title_s); // post title
                     hashMap.put("description", description); // post description

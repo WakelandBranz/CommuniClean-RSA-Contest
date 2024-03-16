@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,14 +38,13 @@ import java.util.List;
  */
 public class ProfileFragment extends Fragment {
 
-    private FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     ImageView profilePicture;
-    TextView name, email;
-    RecyclerView postrecycle;
-    FloatingActionButton fab;
+    TextView username, userEmail;
+    RecyclerView postRecycler;
+    FloatingActionButton editProfileData;
     List<ModelPost> posts;
     AdapterPosts adapterPosts;
     String uid;
@@ -60,16 +60,16 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("Users");
-        profilePicture = view.findViewById(R.id.avatartv);
-        name = view.findViewById(R.id.nametv);
-        email = view.findViewById(R.id.emailtv);
+        profilePicture = view.findViewById(R.id.profile_picture);
+        username = view.findViewById(R.id.username);
+        userEmail = view.findViewById(R.id.email);
         uid = FirebaseAuth.getInstance().getUid();
-        fab = view.findViewById(R.id.fab);
-        postrecycle = view.findViewById(R.id.recyclerposts);
+        editProfileData = view.findViewById(R.id.edit_profile_data);
+        postRecycler = view.findViewById(R.id.recycler_posts);
         posts = new ArrayList<>();
         pd = new ProgressDialog(getActivity());
         loadMyPosts();
@@ -81,26 +81,26 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    String name_s = "" + dataSnapshot1.child("name").getValue();
-                    String email_s = "" + dataSnapshot1.child("email").getValue();
+                    String username_s = "" + dataSnapshot1.child("name").getValue();
+                    String userEmail_s = "" + dataSnapshot1.child("email").getValue();
                     String image = "" + dataSnapshot1.child("image").getValue();
-                    name.setText(name_s);
-                    email.setText(email_s);
+                    username.setText(username_s);
+                    userEmail.setText(userEmail_s);
                     try {
                         Glide.with(getActivity()).load(image).into(profilePicture);
                     }
                     catch (Exception e) {
-
+                        Log.d("ProfileFragment", "Failed to load " + username_s + "'s profile picture");
                     }
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d("big time error", "This should never happen, check ProfileFragment OnCreateView OnCancelled");
             }
         });
-        fab.setOnClickListener(new View.OnClickListener() {
+        editProfileData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), EditProfilePage.class));
@@ -113,7 +113,7 @@ public class ProfileFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
-        postrecycle.setLayoutManager(layoutManager);
+        postRecycler.setLayoutManager(layoutManager);
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Posts");
         Query query = databaseReference.orderByChild("uid").equalTo(uid);
@@ -123,15 +123,35 @@ public class ProfileFragment extends Fragment {
                 posts.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     ModelPost modelPost = dataSnapshot1.getValue(ModelPost.class);
-                    posts.add(modelPost);
-                    adapterPosts = new AdapterPosts(getActivity(), posts);
-                    postrecycle.setAdapter(adapterPosts);
+                    fetchUserDataAndRenderPost(modelPost);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getActivity(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
+    private void fetchUserDataAndRenderPost(final ModelPost modelPost) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(modelPost.getUid());
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String username = dataSnapshot.child("name").getValue(String.class);
+                    String userProfilePicture = dataSnapshot.child("image").getValue(String.class);
+                    modelPost.setUname(username);
+                    modelPost.setUdp(userProfilePicture);
+                }
+                posts.add(modelPost);
+                adapterPosts = new AdapterPosts(getActivity(), posts);
+                postRecycler.setAdapter(adapterPosts);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getActivity(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
