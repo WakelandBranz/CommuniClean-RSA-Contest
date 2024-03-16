@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +50,7 @@ public class ProfileFragment extends Fragment {
     AdapterPosts adapterPosts;
     String uid;
     ProgressDialog pd;
+    Button signOut;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -77,6 +79,7 @@ public class ProfileFragment extends Fragment {
 
         // Retrieving user email data from firebase
         Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
+        signOut = view.findViewById(R.id.sign_out);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -99,6 +102,8 @@ public class ProfileFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d("big time error", "This should never happen, check ProfileFragment OnCreateView OnCancelled");
             }
+
+
         });
         editProfileData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,8 +111,18 @@ public class ProfileFragment extends Fragment {
                 startActivity(new Intent(getActivity(), EditProfilePage.class));
             }
         });
+
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
+
 
     private void loadMyPosts() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

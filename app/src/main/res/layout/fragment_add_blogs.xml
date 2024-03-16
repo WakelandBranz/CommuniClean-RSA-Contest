@@ -3,6 +3,7 @@
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
 tools:context=".AddBlogsFragment">
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +13,7 @@ tools:context=".AddBlogsFragment">
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/editt"
+            android:background="@drawable/border_shadow2"
             android:hint="Enter Title"
             android:singleLine="true"
             android:id="@+id/ptitle"
@@ -24,13 +25,13 @@ tools:context=".AddBlogsFragment">
             android:layout_height="200dp"
             android:id="@+id/imagep"
             android:layout_marginTop="15dp"
-            android:background="@drawable/editt"
+            android:background="@drawable/border_shadow2"
             android:src="@drawable/ic_images"
             />
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/editt"
+            android:background="@drawable/border_shadow2"
             android:hint="Enter Description"
             android:layout_marginTop="15dp"
             android:inputType="textCapSentences|textMultiLine"
@@ -40,15 +41,16 @@ tools:context=".AddBlogsFragment">
             android:id="@+id/pdes"
             android:padding="10dp"
             />
+
         <Button
+            android:id="@+id/pupload"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:backgroundTint="@color/buttonColor"
             android:layout_width="match_parent"
-            android:layout_marginTop="20sp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:id="@+id/pupload"
-            android:text="Upload"
-            android:textAlignment="center"
-            style="@style/Widget.AppCompat.Button.Colored"/>
+            android:layout_marginTop="20sp"
+            android:text="Upload" />
     </LinearLayout>
 </ScrollView>
 

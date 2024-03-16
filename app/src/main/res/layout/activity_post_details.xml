@@ -9,7 +9,8 @@
     <androidx.core.widget.NestedScrollView
         android:layout_above="@id/commentsa"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,8 +23,7 @@
                 app:cardElevation="3dp"
                 app:contentPadding="5dp"
                 app:cardUseCompatPadding="true"
-                app:cardBackgroundColor="@color/colorWhite"
-                >
+                app:cardBackgroundColor="@color/colorWhite">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -33,7 +33,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:background="@color/colorWhite">
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:layout_width="50dp"
                             android:layout_height="50dp"
@@ -44,10 +45,12 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:background="@color/colorWhite">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="10dp"
                                 android:text="Name"
                                 android:textColor="@color/colorBlack"
                                 android:textSize="20sp"
@@ -55,8 +58,11 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="10dp"
                                 android:text="33 min"
-                                android:id="@+id/utimeco"/>
+                                android:textColor="@color/colorBlack"
+                                android:id="@+id/utimeco"
+                                android:background="@color/colorWhite"/>
 
 
                         </LinearLayout>
@@ -72,20 +78,24 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/ptitleco"
-                        android:textSize="16sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
-                        android:text="Title"/>
+                        android:text="Title"
+                        android:textColor="@color/colorBlack"/>
                     <TextView
+                        android:id="@+id/descriptco"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorBlack"
                         android:text="Description"
-                        android:id="@+id/descriptco"/>
+                        android:textColor="@color/colorGray"
+                        android:textSize="18sp"/>
+
                     <ImageView
+                        android:id="@+id/pimagetvco"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:id="@+id/pimagetvco"
-                        android:background="@color/colorWhite"/>
+                        android:background="@drawable/border_shadow" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -97,16 +107,16 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/plikebco"
                         android:layout_weight="1"
-                        android:textColor="@color/colorPrimary"
-                        android:text="1.2K Likes"/>
+                        android:textColor="@color/colorWhite"
+                        android:text="0 Likes"/>
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/pcommenttv"
                             android:layout_weight="1"
                             android:textAlignment="textEnd"
-                            android:textColor="@color/colorPrimary"
-                            android:text="1.2K Comment"/>
+                            android:textColor="@color/colorWhite"
+                            android:text="0 Comment(s)"/>
                     </LinearLayout>
                     <View
                         android:layout_width="match_parent"
@@ -123,6 +133,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Like"
+                            android:textColor="@color/colorBlack"
                             android:autoLink="all"
                             android:drawableLeft="@drawable/ic_like"
                             android:drawableStart="@drawable/ic_like"
@@ -134,12 +145,13 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="SHARE"
+                            android:textColor="@color/colorBlack"
                             android:drawableLeft="@drawable/ic_share"
                             android:drawableStart="@drawable/ic_share"
                             android:padding="5dp"
-                            android:background="@color/colorWhite"/>
+                            android:background="@color/colorWhite"
+                            android:orientation="vertical"/>
                     </LinearLayout>
-
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
@@ -151,18 +163,21 @@
                 android:padding="2dp"
                 android:drawableStart="@drawable/ic_commenting"
                 android:drawableLeft="@drawable/ic_commenting"
-                android:textColor="@color/colorBlack"/>
+                android:textColor="@color/colorWhite"/>
+
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclecomment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/recyclecomment"/>
+                android:background="@color/colorWhite" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
     <RelativeLayout
         android:id="@+id/commentsa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorWhite">
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="50dp"
             android:layout_height="50dp"

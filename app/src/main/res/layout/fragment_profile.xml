@@ -2,24 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/colorGray"
+    android:background="@color/colorWhite"
     android:layout_height="match_parent"
     tools:context=".ProfileFragment">
 
         <RelativeLayout
             android:id="@+id/r1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:id="@+id/banner"
-                android:scaleType="fitXY"
-                android:background="@color/colorPrimaryDark"/>
+                android:id="@+id/treeLogo"
+                android:layout_width="50dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="22dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/tree_icon" />
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="85dp"
                 android:layout_marginTop="100dp"
                 android:orientation="horizontal">
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -34,21 +36,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#77000000"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:backgroundTint="@color/colorPrimary">
                     <TextView
                         android:id="@+id/username"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="5dp"
+                        android:text="Username"
                         android:textSize="25sp"
                         android:textColor="@color/colorWhite"
-                        android:layout_marginLeft="5dp"/>
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="20dp"/>
+
                     <TextView
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
+                        android:text="Email"
                         android:textColor="@color/colorWhite"
                         android:layout_marginLeft="5dp"/>
                 </LinearLayout>
@@ -66,6 +73,22 @@
             android:layout_below="@id/linearLayout"/>
     </ScrollView>
 
+    <Button
+        android:id="@+id/sign_out"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:text="Sign out"
+        android:textAllCaps="false"
+        android:textSize="24sp"
+        android:textColor="@android:color/background_light"
+        android:background="@drawable/buttons"
+        />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/edit_profile_data"
         android:layout_width="wrap_content"
@@ -75,6 +98,8 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="10dp"
         android:layout_alignParentRight="true"
+        android:backgroundTint="@color/colorPrimary"
+        android:background="@color/colorPrimary"
         android:contentDescription="Edit your profile data" />
 
 </RelativeLayout>

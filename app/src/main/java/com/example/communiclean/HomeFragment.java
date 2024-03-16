@@ -131,35 +131,8 @@ public class HomeFragment extends Fragment {
                         tempPosts.add(modelPost);
                     }
                 }
-                    posts.addAll(tempPosts);
+                posts.addAll(tempPosts);
                 adapterPosts.notifyDataSetChanged();
-                //posts.clear();
-                //List<ModelPost> tempPosts = new ArrayList<>();
-                //for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                //    ModelPost modelPost = dataSnapshot1.getValue(ModelPost.class);
-                //    tempPosts.add(modelPost);
-                //}
-                //posts.addAll(tempPosts);
-                //if (adapterPosts == null) {
-                //    adapterPosts = new AdapterPosts(getActivity(), posts);
-                //    recyclerView.setAdapter(adapterPosts);
-                //}
-                //else {
-                //    adapterPosts.notifyDataSetChanged();
-                //}
-
-                //posts.clear();
-                //
-                //for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                //    ModelPost modelPost = dataSnapshot1.getValue(ModelPost.class);
-                //    if (modelPost.getTitle().toLowerCase().contains(search.toLowerCase()) ||
-                //            modelPost.getDescription().toLowerCase().contains(search.toLowerCase())) {
-                //        posts.add(modelPost);
-                //    }
-                //    adapterPosts = new AdapterPosts(getActivity(), posts);
-                //    recyclerView.setAdapter(adapterPosts);
-//
-                //}
             }
 
             @Override

@@ -4,18 +4,18 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorLightGray"
+    android:background="@drawable/border_shadow2"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
     app:contentPadding="5dp"
     app:cardUseCompatPadding="true"
-    app:cardBackgroundColor="@color/colorGray"
+    app:cardBackgroundColor="@color/colorWhite"
     >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/colorLightGray">
+        android:background="@color/colorWhite">
         <LinearLayout
             android:id="@+id/profilelayout"
             android:layout_width="match_parent"
@@ -23,37 +23,40 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/picturetv"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:id="@+id/picturetv"
                 android:scaleType="centerCrop"
                 android:src="@drawable/profile_image"/>
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@color/colorWhite">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Name"
-                    android:textColor="@color/colorBlack"
                     android:textSize="20sp"
-                    android:id="@+id/unametv"/>
+                    android:id="@+id/unametv"
+                    android:textColor="@color/textColor"/>
                 <TextView
+                    android:id="@+id/utimetv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="33 min"
-                    android:id="@+id/utimetv"/>
+                    android:textColor="@color/textColor"/>
 
 
             </LinearLayout>
             <ImageButton
+                android:id="@+id/morebtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:src="@drawable/ic_more"
-                android:id="@+id/morebtn"/>
+                android:background="@color/colorWhite"
+                android:src="@drawable/ic_more" />
 
         </LinearLayout>
         <TextView
@@ -62,13 +65,14 @@
             android:id="@+id/ptitletv"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:text="Title"/>
+            android:text="Title"
+            android:textColor="@color/textColor"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorBlack"
             android:text="Description"
-            android:id="@+id/descript"/>
+            android:id="@+id/descript"
+            android:textColor="@color/textColor"/>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/plikeb"
                 android:layout_weight="1"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/textColor"
                 android:text="0 Like(s)"/>
             <TextView
                 android:layout_width="match_parent"
@@ -99,7 +103,7 @@
 <View
     android:layout_width="match_parent"
     android:layout_height="1dp"
-    android:background="#F5F0F0"/>
+    android:background="@color/colorWhite"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,6 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Like"
+                android:textColor="@color/textColor"
                 android:autoLink="all"
                 android:drawableLeft="@drawable/ic_like"
                 android:drawableStart="@drawable/ic_like"
@@ -122,12 +127,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="COMMENT"
+                android:textColor="@color/textColor"
 
                 android:autoLink="all"
                 android:drawableLeft="@drawable/ic_comment"
                 android:drawableStart="@drawable/ic_comment"
                 android:padding="5dp"
-                android:background="@color/colorLightGray"/>
+                android:background="@color/colorWhite"/>
         </LinearLayout>
 
     </LinearLayout>
