@@ -166,8 +166,8 @@ public class PostDetailsActivity extends AppCompatActivity {
     }
 
     private void setLikes() {
-        final DatabaseReference liekeref = FirebaseDatabase.getInstance().getReference().child("Likes");
-        liekeref.addValueEventListener(new ValueEventListener() {
+        final DatabaseReference likeRef = FirebaseDatabase.getInstance().getReference().child("Likes");
+        likeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -191,21 +191,21 @@ public class PostDetailsActivity extends AppCompatActivity {
     private void likePost() {
 
         mlike = true;
-        final DatabaseReference liekeref = FirebaseDatabase.getInstance().getReference().child("Likes");
-        final DatabaseReference postref = FirebaseDatabase.getInstance().getReference().child("Posts");
-        liekeref.addValueEventListener(new ValueEventListener() {
+        final DatabaseReference likeRef = FirebaseDatabase.getInstance().getReference().child("Likes");
+        final DatabaseReference postRef = FirebaseDatabase.getInstance().getReference().child("Posts");
+        likeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (mlike) {
                     if (dataSnapshot.child(postId).hasChild(myUid)) {
-                        postref.child(postId).child("plike").setValue("" + (Integer.parseInt(postLikes) - 1));
-                        liekeref.child(postId).child(myUid).removeValue();
+                        postRef.child(postId).child("plike").setValue("" + (Integer.parseInt(postLikes) - 1));
+                        likeRef.child(postId).child(myUid).removeValue();
                         mlike = false;
 
                     } else {
-                        postref.child(postId).child("plike").setValue("" + (Integer.parseInt(postLikes) + 1));
-                        liekeref.child(postId).child(myUid).setValue("Liked");
+                        postRef.child(postId).child("plike").setValue("" + (Integer.parseInt(postLikes) + 1));
+                        likeRef.child(postId).child(myUid).setValue("Liked");
                         mlike = false;
                     }
                 }

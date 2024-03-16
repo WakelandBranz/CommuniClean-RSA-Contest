@@ -3,10 +3,10 @@
     <!-- Colors can be changed throughout the project here. Names correspond to how they are rendered -->
     <color name="colorPrimary">#31572c</color>
     <color name="colorPrimaryDark">#132a13</color>
-    <color name="colorAccent">#e7c6ff</color>
+    <color name="colorAccent">#66846d</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorGray">#404040</color>
-    <color name="colorGray02">#262626</color>
+    <color name="colorGray">#4c544c</color>
+    <color name="colorGray02">#667266</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorRed">#F4511E</color>
     <color name="colorGreen">#17581A</color>
@@ -14,4 +14,7 @@
     <color name="btnedit">#2CA7E0</color>
     <color name="neutral">#0a1b97</color>
     <color name="colordrawer">#2B2C2E</color>
+
+    <color name="buttonColor">#87ac8e</color>
+    <color name="iconColor">#000000</color>
 </resources>

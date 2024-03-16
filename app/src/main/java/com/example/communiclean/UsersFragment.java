@@ -68,10 +68,9 @@ public class UsersFragment extends Fragment {
                     if (modelUsers.getUid() != null && !modelUsers.getUid().equals(firebaseUser.getUid())) {
                         usersList.add(modelUsers);
                     }
-                    adapterUsers = new AdapterUsers(getActivity(), usersList);
-                    recyclerView.setAdapter(adapterUsers);
                 }
-
+                adapterUsers = new AdapterUsers(getActivity(), usersList);
+                recyclerView.setAdapter(adapterUsers);
             }
 
             @Override
@@ -96,11 +95,10 @@ public class UsersFragment extends Fragment {
                             usersList.add(modelUsers);
                         }
                     }
-                    adapterUsers = new AdapterUsers(getActivity(), usersList);
-                    adapterUsers.notifyDataSetChanged();
-                    recyclerView.setAdapter(adapterUsers);
                 }
-
+                adapterUsers = new AdapterUsers(getActivity(), usersList);
+                adapterUsers.notifyDataSetChanged();
+                recyclerView.setAdapter(adapterUsers);
             }
 
             @Override
@@ -109,7 +107,6 @@ public class UsersFragment extends Fragment {
             }
         });
     }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -127,7 +124,8 @@ public class UsersFragment extends Fragment {
             public boolean onQueryTextSubmit(String query) {
                 if (!TextUtils.isEmpty(query.trim())) {
                     searchUsers(query);
-                } else {
+                }
+                else {
                     getAllUsers();
                 }
                 return false;
@@ -137,7 +135,8 @@ public class UsersFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 if (!TextUtils.isEmpty(newText.trim())) {
                     searchUsers(newText);
-                } else {
+                }
+                else {
                     getAllUsers();
                 }
                 return false;

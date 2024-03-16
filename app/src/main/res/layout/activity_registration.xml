@@ -4,27 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity">
+    android:background="@color/colorAccent"
+    tools:context=".RegistrationActivity">
 
     <TextView
+        android:id="@+id/WelcomeText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign Up Here"
-        android:textColor="@color/colorBlack"
-        android:layout_marginTop="50dp"
-        android:id="@+id/techer"
-        android:textStyle="bold|italic"
-        android:gravity="center"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:textSize="28sp"/>
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:text="Welcome to\nCommuniClean!"
+        android:textColor="@color/colorWhite"
+        android:textSize="28sp"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/techer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="-1dp"
+        android:layout_marginTop="156dp"
+        android:gravity="center"
+        android:text="Registration"
+        android:textColor="@color/colorWhite"
+        android:textSize="30sp"
+        android:textStyle="bold|italic" />
+    <ImageView
+        android:id="@+id/treeLogo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/techer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/tree_icon" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Name"
         android:layout_marginTop="120dp"
         android:layout_marginStart="35dp"
-        android:layout_below="@id/techer"
+        android:layout_below="@id/WelcomeText"
         android:textColor="@color/colorBlack"
         android:id="@+id/names"/>
     <EditText
@@ -33,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/names"
-        android:hint="Your Name..."
+        android:hint="Name..."
         android:layout_marginTop="10dp"
         android:inputType="text"
         android:background="@drawable/edit"
@@ -114,14 +138,15 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/register_button"
-        android:text=" Already Have a Account?Sign In"
+        android:ellipsize="end"
+        android:text="Already have an account?\nSign In"
         android:layout_marginTop="20dp"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="23dp"
         android:textAlignment="center"
         android:textSize="17sp"
         android:textStyle="bold"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorWhite"
         />
 
 </RelativeLayout>
