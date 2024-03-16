@@ -2,7 +2,9 @@ package com.example.communiclean;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -23,13 +25,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.w3c.dom.Text;
+
 import java.util.HashMap;
 
 public class RegistrationActivity extends AppCompatActivity {
-
-    private EditText email, password, name;
-    private Button mRegister;
-    private TextView existaccount;
     private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
 
@@ -41,11 +41,12 @@ public class RegistrationActivity extends AppCompatActivity {
         actionBar.setTitle("Create Account");
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        email = findViewById(R.id.register_email);
-        name = findViewById(R.id.register_name);
-        password = findViewById(R.id.register_password);
-        mRegister = findViewById(R.id.register_button);
-        existaccount = findViewById(R.id.homepage);
+        EditText registerEmail = findViewById(R.id.register_email);
+        EditText registerName = findViewById(R.id.register_name);
+        EditText registerPassword = findViewById(R.id.register_password);
+        Button mRegister = findViewById(R.id.register_button);
+        Button ncdeqReport = findViewById(R.id.ncdeq_button);
+        TextView accountExists = findViewById(R.id.homepage);
         mAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Register");
@@ -53,26 +54,38 @@ public class RegistrationActivity extends AppCompatActivity {
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email_s = email.getText().toString().trim();
-                String uname = name.getText().toString().trim();
-                String pass = password.getText().toString().trim();
+                String uname = registerName.getText().toString().trim();
+                String email_s = registerEmail.getText().toString().trim();
+                String pass = registerPassword.getText().toString().trim();
                 if (!Patterns.EMAIL_ADDRESS.matcher(email_s).matches()) {
-                    email.setError("Invalid Email");
-                    email.setFocusable(true);
+                    registerEmail.setError("Invalid Email");
+                    registerEmail.setFocusable(true);
                 }
                 else if (pass.length() < 6) {
-                    password.setError("Length Must be greater than 6 character");
-                    password.setFocusable(true);
+                    registerPassword.setError("Length Must be greater than 6 character");
+                    registerPassword.setFocusable(true);
                 }
                 else {
                     registerUser(email_s, pass, uname);
                 }
             }
         });
-        existaccount.setOnClickListener(new View.OnClickListener() {
+        accountExists.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
+            }
+        });
+
+        // Send user to NCDEQ report page
+        ncdeqReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("NCDEQ - Login", "Sending user to NCDEQ anonymous comment report");
+                Uri webpage = Uri.parse("https://www.deq.nc.gov/outreach-education/environmental-justice/nc-deq-anonymous-comment-tool");
+                Intent ncdeqIntent = new Intent(Intent.ACTION_VIEW, webpage);
+                startActivity(ncdeqIntent);
+                finish();
             }
         });
     }

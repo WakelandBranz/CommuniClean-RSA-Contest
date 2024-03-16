@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Patterns;
@@ -33,8 +34,6 @@ import java.util.HashMap;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText email, password, name;
-    private Button mlogin;
-    private TextView newdnewaccount, reocverpass;
     FirebaseUser currentUser;
     private ProgressDialog loadingBar;
     private FirebaseAuth mAuth;
@@ -75,16 +74,20 @@ public class LoginActivity extends AppCompatActivity {
         // initialising the layout items
         email = findViewById(R.id.login_email);
         password = findViewById(R.id.login_password);
-        newdnewaccount = findViewById(R.id.needs_new_account);
-        reocverpass = findViewById(R.id.forgetp);
+        TextView needNewAccount = findViewById(R.id.need_new_account);
+        TextView recoverPass = findViewById(R.id.forgetp);
         mAuth = FirebaseAuth.getInstance();
-        mlogin = findViewById(R.id.login_button);
+        Button mlogin = findViewById(R.id.login_button);
+        Button ncdeqReport = findViewById(R.id.ncdeq_button);
         loadingBar = new ProgressDialog(this);
         mAuth = FirebaseAuth.getInstance();
 
         // checking if user is null or not
         currentUser = mAuth.getCurrentUser();
 
+        /*
+        SETTING BUTTON FUNCTIONALITY
+        */
 
         mlogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // If new account then move to Registration Activity
-        newdnewaccount.setOnClickListener(new View.OnClickListener() {
+        needNewAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this, RegistrationActivity.class));
@@ -113,10 +116,22 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // Recover Your Password using email
-        reocverpass.setOnClickListener(new View.OnClickListener() {
+        recoverPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showRecoverPasswordDialog();
+            }
+        });
+
+        // Send user to NCDEQ report page
+        ncdeqReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("NCDEQ - Login", "Sending user to NCDEQ anonymous comment report");
+                Uri webpage = Uri.parse("https://www.deq.nc.gov/outreach-education/environmental-justice/nc-deq-anonymous-comment-tool");
+                Intent ncdeqIntent = new Intent(Intent.ACTION_VIEW, webpage);
+                startActivity(ncdeqIntent);
+                finish();
             }
         });
     }
@@ -160,7 +175,8 @@ public class LoginActivity extends AppCompatActivity {
                 loadingBar.dismiss();
                 if (task.isSuccessful()) {
                     Toast.makeText(LoginActivity.this, "Done sent", Toast.LENGTH_LONG).show();
-                } else {
+                }
+                else {
                     Toast.makeText(LoginActivity.this, "Error Occurred", Toast.LENGTH_LONG).show();
                 }
             }

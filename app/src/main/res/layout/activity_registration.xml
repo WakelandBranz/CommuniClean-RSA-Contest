@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
+    android:background="@color/colorPrimary"
     tools:context=".RegistrationActivity">
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="-1dp"
-        android:layout_marginTop="156dp"
+        android:layout_marginTop="145dp"
         android:gravity="center"
         android:text="Registration"
         android:textColor="@color/colorWhite"
@@ -37,10 +37,9 @@
     <ImageView
         android:id="@+id/treeLogo"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         android:layout_below="@id/techer"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
         android:src="@drawable/tree_icon" />
     <TextView
         android:layout_width="match_parent"
@@ -146,7 +145,20 @@
         android:textAlignment="center"
         android:textSize="17sp"
         android:textStyle="bold"
-        android:textColor="@color/colorWhite"
-        />
+        android:textColor="@color/colorWhite" />
+    <Button
+        android:id="@+id/ncdeq_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/homepage"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginRight="50dp"
+        android:background="@drawable/buttonss"
+        android:padding="4dp"
+        android:text="NCDEQ Report"
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp" />
 
 </RelativeLayout>

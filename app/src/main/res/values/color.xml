@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Colors can be changed throughout the project here. Names correspond to how they are rendered -->
-    <color name="colorPrimary">#31572c</color>
+    <color name="colorPrimary">#66846d</color>
     <color name="colorPrimaryDark">#132a13</color>
-    <color name="colorAccent">#66846d</color>
+    <color name="colorAccent">#31572c</color>
     <color name="colorBlack">#000000</color>
     <color name="colorGray">#4c544c</color>
     <color name="colorGray02">#667266</color>

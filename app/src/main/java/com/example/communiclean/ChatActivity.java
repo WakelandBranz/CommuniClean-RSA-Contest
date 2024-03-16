@@ -268,15 +268,17 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         // request for permission if not given
         switch (requestCode) {
             case CAMERA_REQUEST: {
                 if (grantResults.length > 0) {
                     boolean camera_accepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     boolean writeStorageaccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    if (camera_accepted && writeStorageaccepted) {
+                    if (camera_accepted) {
                         pickFromCamera(); // if access granted then click
-                    } else {
+                    }
+                    else {
                         Toast.makeText(this, "Please Enable Camera and Storage Permissions", Toast.LENGTH_LONG).show();
                     }
                 }

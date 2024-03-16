@@ -78,18 +78,18 @@ public class DashboardActivity extends AppCompatActivity {
                 return true;
             }
             else if (itemIds == R.id.nav_chat) {
-                //actionBar.setTitle("Chats");
-                //ChatListFragment listFragment = new ChatListFragment();
-                //FragmentTransaction fragmentTransaction3 = getSupportFragmentManager().beginTransaction();
-                //fragmentTransaction3.replace(R.id.content, listFragment, "");
-                //fragmentTransaction3.commit();
+                actionBar.setTitle("Chats");
+                ChatListFragment listFragment = new ChatListFragment();
+                FragmentTransaction fragmentTransaction3 = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction3.replace(R.id.content, listFragment, "");
+                fragmentTransaction3.commit();
 
                 // Temporary sign out, uncomment this and click the home button if there are issues
                 // regarding nullifying non-existant users
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-                finish();
+                //FirebaseAuth.getInstance().signOut();
+                //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                //startActivity(intent);
+                //finish();
 
                 Log.d("DashboardActivity", "User navigated to Chat fragment");
                 return true;
