@@ -281,10 +281,13 @@ public class AddBlogsFragment extends Fragment {
 
     // If access is given then pick image from gallery
     private void pickFromGallery() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
         galleryIntent.setType("image/*");
-        //galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(galleryIntent, IMAGE_PICKGALLERY_REQUEST);
+        //Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+        //galleryIntent.setType("image/*");
+        ////galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        //startActivityForResult(galleryIntent, IMAGE_PICKGALLERY_REQUEST);
     }
 
     // Upload the value of blog data into firebase
@@ -362,18 +365,33 @@ public class AddBlogsFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == getActivity().RESULT_OK) {
-            if (requestCode == IMAGE_PICKGALLERY_REQUEST) {
-                imageuri = data.getData();
-                image.setImageURI(imageuri);
-            }
-            if (requestCode == IMAGE_PICKCAMERA_REQUEST) {
-                image.setImageURI(imageuri);
-            }
+
+        if (requestCode == IMAGE_PICKGALLERY_REQUEST && resultCode == getActivity().RESULT_OK && data != null) {
+            Log.d("AddBlogsFragment", "Gallery successfully requested");
+            imageuri = data.getData();
+            image.setImageURI(imageuri);
+        }
+        else if (requestCode == IMAGE_PICKCAMERA_REQUEST && resultCode == getActivity().RESULT_OK) {
+            Log.d("AddBlogsFragment", "Camera successfully requested");
+            image.setImageURI(imageuri);
         }
         else {
-            Log.d("AddBlogsFragment", "Image code was not 'RESULT_OK'");
+            Log.d("AddBlogsFragment", "Image selection cancelled or failed");
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
+        //super.onActivityResult(requestCode, resultCode, data);
+        //if (resultCode == getActivity().RESULT_OK) {
+        //    if (requestCode == IMAGE_PICKGALLERY_REQUEST) {
+        //        imageuri = data.getData();
+        //        image.setImageURI(imageuri);
+        //    }
+        //    if (requestCode == IMAGE_PICKCAMERA_REQUEST) {
+        //        image.setImageURI(imageuri);
+        //    }
+        //}
+        //else {
+        //    Log.d("AddBlogsFragment", "Image code was not 'RESULT_OK'");
+        //}
+        //super.onActivityResult(requestCode, resultCode, data);
     }
 }
