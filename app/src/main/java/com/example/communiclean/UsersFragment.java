@@ -119,6 +119,10 @@ public class UsersFragment extends Fragment {
         menu.findItem(R.id.logout).setVisible(false);
         MenuItem item = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+
+        // Set the query hint to "Search users"
+        searchView.setQueryHint("Search users");
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

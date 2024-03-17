@@ -231,7 +231,7 @@ public class EditProfilePage extends AppCompatActivity {
 
     // requesting for storage permission
     private void requestStoragePermission() {
-        requestPermissions(storagePermission, STORAGE_REQUEST);
+        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_REQUEST);
     }
 
     // checking camera permission ,if given then we can click image using our camera
@@ -444,13 +444,7 @@ public class EditProfilePage extends AppCompatActivity {
             break;
             case STORAGE_REQUEST: {
                 if (grantResults.length > 0) {
-                    boolean writeStorageaccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (writeStorageaccepted) {
-                        pickFromGallery();
-                    }
-                    else {
-                        Toast.makeText(this, "Please Enable Storage Permissions", Toast.LENGTH_LONG).show();
-                    }
+                    pickFromGallery();
                 }
             }
             break;
@@ -470,8 +464,7 @@ public class EditProfilePage extends AppCompatActivity {
 
     // We will select an image from gallery
     private void pickFromGallery() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-        galleryIntent.setType("image/*");
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, IMAGEPICK_GALLERY_REQUEST);
     }
 

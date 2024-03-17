@@ -153,6 +153,10 @@ public class HomeFragment extends Fragment {
         inflater.inflate(R.menu.main_menu, menu);
         MenuItem item = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+
+        // Set the query hint to "Search posts"
+        searchView.setQueryHint("Search posts");
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -22,8 +23,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresExtension;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -71,6 +74,8 @@ public class AddBlogsFragment extends Fragment {
     String name, email, uid, udp;
     DatabaseReference databaseReference;
     Button upload;
+
+    ActivityResultLauncher<Intent> resultLauncher;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -218,30 +223,28 @@ public class AddBlogsFragment extends Fragment {
         switch (requestCode) {
             case CAMERA_REQUEST: {
                 if (grantResults.length > 0) {
-
                     boolean cameraGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean storageGranted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
 
                     if (cameraGranted) {
                         pickFromCamera();
-                    }
-                    else {
-                        Toast.makeText(this.getActivity(), "Please Enable Camera and Storage Permissions", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(this.getActivity(), "Please Enable Camera Permissions", Toast.LENGTH_LONG).show();
                     }
                 }
             }
-
-            // function end
             break;
             case STORAGE_REQUEST: {
                 if (grantResults.length > 0) {
-                    boolean writeStorageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-
-                    // if the user grants the app permission to parse data from their storage
-                    if (true) {
-                        pickFromGallery();
-                    } else {
-                        Toast.makeText(getContext(), "Please Enable Storage Permissions", Toast.LENGTH_LONG).show();
-                    }
+                    pickFromGallery();
+                    //boolean storageGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    //if (storageGranted) {
+                    //    pickFromGallery();
+                    //}
+                    //else {
+                    //
+                    //    Toast.makeText(getContext(), "Please Enable Storage Permission", Toast.LENGTH_LONG).show();
+                    //}
                 }
             }
             break;
@@ -250,8 +253,7 @@ public class AddBlogsFragment extends Fragment {
 
     // Request for permission to write data into storage
     private void requestStoragePermission() {
-        ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA}, IMAGE_PICKGALLERY_REQUEST);
-        //requestPermissions(storagePermission, STORAGE_REQUEST);
+        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_REQUEST);
     }
 
     // Check camera permission to click picture using camera
@@ -264,7 +266,6 @@ public class AddBlogsFragment extends Fragment {
     // Request for permission to click photo using camera in app
     private void requestCameraPermission() {
         requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_REQUEST);
-        //requestPermissions(cameraPermission, CAMERA_REQUEST);
     }
 
     // If access is given then pick image from camera and then put
@@ -279,15 +280,10 @@ public class AddBlogsFragment extends Fragment {
         startActivityForResult(cameraIntent, IMAGE_PICKCAMERA_REQUEST);
     }
 
-    // If access is given then pick image from gallery
+    // If access is given then pick image from gallery)
     private void pickFromGallery() {
-        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        galleryIntent.setType("image/*");
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(galleryIntent, IMAGE_PICKGALLERY_REQUEST);
-        //Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-        //galleryIntent.setType("image/*");
-        ////galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        //startActivityForResult(galleryIntent, IMAGE_PICKGALLERY_REQUEST);
     }
 
     // Upload the value of blog data into firebase
@@ -341,7 +337,7 @@ public class AddBlogsFragment extends Fragment {
                                     Log.d("AddBlogsFragment", "Successfully added new post!");
 
                                     startActivity(new Intent(getContext(), DashboardActivity.class));
-                                    getActivity().finish();
+                                    //getActivity().finish();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -364,33 +360,17 @@ public class AddBlogsFragment extends Fragment {
     // Here we are getting data from image
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-
-        //if (requestCode == IMAGE_PICKGALLERY_REQUEST && resultCode == getActivity().RESULT_OK && data != null) {
-        //    Log.d("AddBlogsFragment", "Gallery successfully requested");
-        //    imageuri = data.getData();
-        //    image.setImageURI(imageuri);
-        //}
-        //else if (requestCode == IMAGE_PICKCAMERA_REQUEST && resultCode == getActivity().RESULT_OK) {
-        //    Log.d("AddBlogsFragment", "Camera successfully requested");
-        //    image.setImageURI(imageuri);
-        //}
-        //else {
-        //    Log.d("AddBlogsFragment", "Image selection cancelled or failed");
-        //}
+        super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == getActivity().RESULT_OK) {
-            if (requestCode == IMAGE_PICKGALLERY_REQUEST) {
+            if (requestCode == IMAGE_PICKGALLERY_REQUEST && data != null && data.getData() != null) {
                 imageuri = data.getData();
                 image.setImageURI(imageuri);
-            }
-            if (requestCode == IMAGE_PICKCAMERA_REQUEST) {
+            } else if (requestCode == IMAGE_PICKCAMERA_REQUEST) {
                 image.setImageURI(imageuri);
             }
+        } else {
+            Log.d("AddBlogsFragment", "Image selection cancelled or failed");
         }
-        else {
-            Log.d("AddBlogsFragment", "Image code was not 'RESULT_OK'");
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 }
