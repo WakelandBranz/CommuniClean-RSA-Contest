@@ -73,10 +73,9 @@ public class ChatListFragment extends Fragment {
             }
         });
         return view;
-
     }
 
-    // loading the user chat layout using chat node
+    // Loading the user chat layout using chat node
     private void loadChats() {
         usersList = new ArrayList<>();
         reference = FirebaseDatabase.getInstance().getReference("Users");

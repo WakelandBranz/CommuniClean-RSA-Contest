@@ -274,9 +274,9 @@ public class AddBlogsFragment extends Fragment {
         contentValues.put(MediaStore.Images.Media.TITLE, "Temp_pic");
         contentValues.put(MediaStore.Images.Media.DESCRIPTION, "Temp Description");
         imageuri = getActivity().getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-        Intent camerIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        camerIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageuri);
-        startActivityForResult(camerIntent, IMAGE_PICKCAMERA_REQUEST);
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageuri);
+        startActivityForResult(cameraIntent, IMAGE_PICKCAMERA_REQUEST);
     }
 
     // If access is given then pick image from gallery
@@ -364,34 +364,33 @@ public class AddBlogsFragment extends Fragment {
     // Here we are getting data from image
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == IMAGE_PICKGALLERY_REQUEST && resultCode == getActivity().RESULT_OK && data != null) {
-            Log.d("AddBlogsFragment", "Gallery successfully requested");
-            imageuri = data.getData();
-            image.setImageURI(imageuri);
-        }
-        else if (requestCode == IMAGE_PICKCAMERA_REQUEST && resultCode == getActivity().RESULT_OK) {
-            Log.d("AddBlogsFragment", "Camera successfully requested");
-            image.setImageURI(imageuri);
-        }
-        else {
-            Log.d("AddBlogsFragment", "Image selection cancelled or failed");
-        }
-
         //super.onActivityResult(requestCode, resultCode, data);
-        //if (resultCode == getActivity().RESULT_OK) {
-        //    if (requestCode == IMAGE_PICKGALLERY_REQUEST) {
-        //        imageuri = data.getData();
-        //        image.setImageURI(imageuri);
-        //    }
-        //    if (requestCode == IMAGE_PICKCAMERA_REQUEST) {
-        //        image.setImageURI(imageuri);
-        //    }
+
+        //if (requestCode == IMAGE_PICKGALLERY_REQUEST && resultCode == getActivity().RESULT_OK && data != null) {
+        //    Log.d("AddBlogsFragment", "Gallery successfully requested");
+        //    imageuri = data.getData();
+        //    image.setImageURI(imageuri);
+        //}
+        //else if (requestCode == IMAGE_PICKCAMERA_REQUEST && resultCode == getActivity().RESULT_OK) {
+        //    Log.d("AddBlogsFragment", "Camera successfully requested");
+        //    image.setImageURI(imageuri);
         //}
         //else {
-        //    Log.d("AddBlogsFragment", "Image code was not 'RESULT_OK'");
+        //    Log.d("AddBlogsFragment", "Image selection cancelled or failed");
         //}
-        //super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == getActivity().RESULT_OK) {
+            if (requestCode == IMAGE_PICKGALLERY_REQUEST) {
+                imageuri = data.getData();
+                image.setImageURI(imageuri);
+            }
+            if (requestCode == IMAGE_PICKCAMERA_REQUEST) {
+                image.setImageURI(imageuri);
+            }
+        }
+        else {
+            Log.d("AddBlogsFragment", "Image code was not 'RESULT_OK'");
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

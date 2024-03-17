@@ -2,24 +2,21 @@ package com.example.communiclean;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class PostLikedByActivity extends AppCompatActivity {
-
     RecyclerView recyclerView;
     String postId;
     List<ModelUsers> list;
@@ -30,7 +27,6 @@ public class PostLikedByActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_liked_by);
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Post Liked By");
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -38,13 +34,15 @@ public class PostLikedByActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         actionBar.setSubtitle(firebaseAuth.getCurrentUser().getEmail());
         recyclerView = findViewById(R.id.likerecycle);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         Intent intent = getIntent();
         postId = intent.getStringExtra("pid");
-
         list = new ArrayList<>();
+        adapterUsers = new AdapterUsers(PostLikedByActivity.this, list);
+        recyclerView.setAdapter(adapterUsers);
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Likes");
-        reference.child(postId).addValueEventListener(new ValueEventListener() {
+        reference.child(postId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 list.clear();
@@ -56,28 +54,26 @@ public class PostLikedByActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
 
     private void getUsers(String hisUid) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
-        databaseReference.orderByChild("uid").equalTo(hisUid).addValueEventListener(new ValueEventListener() {
+        databaseReference.orderByChild("uid").equalTo(hisUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     ModelUsers model = ds.getValue(ModelUsers.class);
-                    list.add(model);
+                    if (!list.contains(model)) {
+                        list.add(model);
+                    }
                 }
-                adapterUsers = new AdapterUsers(PostLikedByActivity.this, list);
-                recyclerView.setAdapter(adapterUsers);
+                adapterUsers.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
