@@ -76,6 +76,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         final String uid = modelPosts.get(position).getUid();
         String name = modelPosts.get(position).getUname();
         final String title = modelPosts.get(position).getTitle();
+        final String category = modelPosts.get(position).getCategory();
         final String description = modelPosts.get(position).getDescription();
         final String ptime = modelPosts.get(position).getPtime();
         String dp = modelPosts.get(position).getUdp();
@@ -90,6 +91,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
         String timedate = DateFormat.format("dd/MM/yyyy hh:mm aa", calendar).toString();
         holder.name.setText(name);
         holder.title.setText(title);
+        holder.category.setText(category);
         holder.description.setText(description);
         holder.time.setText(timedate);
         holder.like.setText(plike + " Likes");
@@ -121,14 +123,6 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
             }
         });
 
-        //holder.like.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        Intent intent = new Intent(holder.itemView.getContext(), PostLikedByActivity.class);
-        //        intent.putExtra("pid", pid);
-        //        holder.itemView.getContext().startActivity(intent);
-        //    }
-        //});
         holder.likebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +138,8 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
                                 postRef.child(postid).child("plike").setValue("" + (plike - 1));
                                 likeRef.child(postid).child(myuid).removeValue();
                                 mprocesslike = false;
-                            } else {
+                            }
+                            else {
                                 postRef.child(postid).child("plike").setValue("" + (plike + 1));
                                 likeRef.child(postid).child(myuid).setValue("Liked");
                                 mprocesslike = false;
@@ -256,7 +251,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
 
     class MyHolder extends RecyclerView.ViewHolder {
         ImageView picture, image;
-        TextView name, time, title, description, like, comments;
+        TextView name, time, title, category, description, like, comments;
         ImageButton more;
         Button likebtn, comment;
         LinearLayout profile;
@@ -269,6 +264,7 @@ public class AdapterPosts extends RecyclerView.Adapter<AdapterPosts.MyHolder> {
             time = itemView.findViewById(R.id.utimetv);
             more = itemView.findViewById(R.id.morebtn);
             title = itemView.findViewById(R.id.ptitletv);
+            category = itemView.findViewById(R.id.category);
             description = itemView.findViewById(R.id.descript);
             like = itemView.findViewById(R.id.plikeb);
             comments = itemView.findViewById(R.id.pcommentco);

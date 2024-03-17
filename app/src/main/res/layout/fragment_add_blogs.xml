@@ -42,6 +42,35 @@ tools:context=".AddBlogsFragment">
             android:minHeight="80dp"
             android:padding="10dp" />
         <TextView
+            android:id="@+id/categoryHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Category"
+            android:textStyle="bold|italic"
+            android:textSize="20dp"
+            android:backgroundTint="@color/buttonColor"
+            android:textColor="@color/colorWhite"
+            android:gravity="center"/>
+        <View
+            style="@style/Divider"
+            android:layout_height="2dp"
+            android:layout_marginBottom="13dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:background="@color/colorGray"
+            android:backgroundTint="@color/colorWhite"/>
+        <EditText
+            android:id="@+id/category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_shadow2"
+            android:hint="Enter Category"
+            android:singleLine="true"
+            android:minHeight="80dp"
+            android:padding="10dp" />
+        <TextView
             android:id="@+id/imageHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,7 +140,7 @@ tools:context=".AddBlogsFragment">
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:textSize="25dp"
-            android:layout_marginTop="20sp"
+            android:layout_marginTop="8dp"
             android:text="Upload" />
     </LinearLayout>
 </ScrollView>

@@ -4,7 +4,7 @@ public class ModelPost {
     public ModelPost() {
     }
 
-    String description;
+    String description, category;
 
     public String getDescription() {
         return description;
@@ -13,6 +13,10 @@ public class ModelPost {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getCategory() { return category; }
+
+    public void setCategory(String category) { this.category = category; }
 
     public String getPid() {
         return pid;

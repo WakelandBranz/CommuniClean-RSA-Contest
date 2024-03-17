@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -61,7 +62,7 @@ public class AddBlogsFragment extends Fragment {
     }
 
     FirebaseAuth firebaseAuth;
-    EditText title, des;
+    EditText title, des, category;
     private static final int CAMERA_REQUEST = 100;
     private static final int STORAGE_REQUEST = 200;
     String[] cameraPermission;
@@ -75,6 +76,8 @@ public class AddBlogsFragment extends Fragment {
     DatabaseReference databaseReference;
     Button upload;
 
+    private static final String[] categoryDropdownPaths = {"Blog", "Cleanup", "Event", "Group", "Personal"};
+
     ActivityResultLauncher<Intent> resultLauncher;
 
     @Override
@@ -84,6 +87,7 @@ public class AddBlogsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_blogs, container, false);
 
         title = view.findViewById(R.id.ptitle);
+        category = view.findViewById(R.id.category);
         des = view.findViewById(R.id.pdes);
         image = view.findViewById(R.id.imagep);
         upload = view.findViewById(R.id.pupload);
@@ -98,6 +102,8 @@ public class AddBlogsFragment extends Fragment {
         // Retrieving the user data name, email, and uid using FirebaseAuth
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+
+
 
         if (currentUser != null) {
             uid = currentUser.getUid();
@@ -146,17 +152,25 @@ public class AddBlogsFragment extends Fragment {
             }
         });
 
-        // Now we will upload out blog
+        // Now we will upload our blog
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String title_s = "" + title.getText().toString().trim();
                 String description = "" + des.getText().toString().trim();
+                String category_s = "" + category.getText().toString().trim();
 
                 // If title empty set error
                 if (TextUtils.isEmpty(title_s)) {
-                    title.setError("Title Cant be empty");
+                    title.setError("Title can't be empty");
                     Toast.makeText(getContext(), "Title can't be left empty", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                // If category empty set error
+                if (TextUtils.isEmpty(category_s)) {
+                    title.setError("Category can't be empty");
+                    Toast.makeText(getContext(), "Category can't be left empty", Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -168,13 +182,13 @@ public class AddBlogsFragment extends Fragment {
 
                 // If description empty set error
                 if (TextUtils.isEmpty(description)) {
-                    des.setError("Description Cant be empty");
+                    des.setError("Description can't be empty");
                     Toast.makeText(getContext(), "Description can't be left empty", Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 else {
-                    uploadData(title_s, description);
+                    uploadData(title_s, description, category_s);
                 }
             }
         });
@@ -287,7 +301,7 @@ public class AddBlogsFragment extends Fragment {
     }
 
     // Upload the value of blog data into firebase
-    private void uploadData(final String title_s, final String description) {
+    private void uploadData(final String title_s, final String description, final String category_s) {
         // Show the progress dialog box
         pd.setMessage("Publishing Post");
         pd.show();
@@ -312,7 +326,7 @@ public class AddBlogsFragment extends Fragment {
                 if (uriTask.isSuccessful()) {
                     // If the task is successful, update the data into firebase
                     HashMap<Object, String> hashMap = new HashMap<>();
-                    hashMap.put("uid", uid);;
+                    hashMap.put("uid", uid);
                     hashMap.put("udp", udp);
                     hashMap.put("title", title_s); // post title
                     hashMap.put("description", description); // post description
@@ -320,6 +334,7 @@ public class AddBlogsFragment extends Fragment {
                     hashMap.put("ptime", timestamp); // time that post was created
                     hashMap.put("plike", "0"); // number of likes on post
                     hashMap.put("pcomments", "0"); // number of comments on post
+                    hashMap.put("category", category_s);
 
                     // Set the data into firebase and then empty the title ,description and image data
                     DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Posts");

@@ -43,7 +43,7 @@ public class PostDetailsActivity extends AppCompatActivity {
 
     String posterUid, postCreationTime, myUid, myUsername, myEmail, myProfilePicture, postImage, postId, postLikes, posterProfilePicture, posterUsername;
     ImageView picture, image;
-    TextView name, time, title, description, like, tcomment;
+    TextView name, time, title, category, description, like, tcomment;
     ImageButton more;
     Button likebtn, share;
     LinearLayout profile;
@@ -73,6 +73,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         time = findViewById(R.id.utimeco);
         more = findViewById(R.id.morebtn);
         title = findViewById(R.id.ptitleco);
+        category = findViewById(R.id.category);
         myEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         description = findViewById(R.id.descriptco);
@@ -356,6 +357,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                 // Retrieve data from post using postId
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     String ptitle = dataSnapshot1.child("title").getValue().toString();
+                    String category_s = dataSnapshot1.child("category").getValue().toString();
                     String descriptions = dataSnapshot1.child("description").getValue().toString();
                     postImage = dataSnapshot1.child("uimage").getValue().toString();
                     posterUid = dataSnapshot1.child("uid").getValue().toString();
@@ -372,6 +374,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                     Log.d("PostDetailsActivity", "Loading post info from " + posterUsername);
                     //name.setText(posterUsername);
                     title.setText(ptitle);
+                    category.setText(category_s);
                     description.setText(descriptions);
                     like.setText(postLikes + " Likes");
                     time.setText(timedate);

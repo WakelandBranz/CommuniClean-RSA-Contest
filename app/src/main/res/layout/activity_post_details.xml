@@ -48,13 +48,13 @@
                             android:orientation="vertical"
                             android:background="@color/colorWhite">
                             <TextView
+                                android:id="@+id/unameco"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="10dp"
                                 android:text="Name"
                                 android:textColor="@color/colorBlack"
-                                android:textSize="20sp"
-                                android:id="@+id/unameco"/>
+                                android:textSize="20sp" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -87,6 +87,13 @@
                         android:textStyle="bold"
                         android:text="Title"
                         android:textColor="@color/colorBlack"/>
+                    <TextView
+                        android:id="@+id/category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Category"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp" />
                     <TextView
                         android:id="@+id/descriptco"
                         android:layout_width="match_parent"
