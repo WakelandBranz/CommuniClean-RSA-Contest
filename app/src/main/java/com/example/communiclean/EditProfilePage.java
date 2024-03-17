@@ -3,6 +3,7 @@ package com.example.communiclean;
 import static java.security.AccessController.getContext;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -16,6 +17,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -75,6 +77,9 @@ public class EditProfilePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile_page);
+
+        // Enable the up button on the action bar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         profilepic = findViewById(R.id.profilepic);
         editname = findViewById(R.id.editname);
@@ -136,6 +141,17 @@ public class EditProfilePage extends AppCompatActivity {
                 updateUsername("name");
             }
         });
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            // Handle the up button click
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -187,7 +203,7 @@ public class EditProfilePage extends AppCompatActivity {
                         Glide.with(EditProfilePage.this).load(image).into(set);
                     }
                     catch (Exception e) {
-
+                        Log.d("EditProfilePage", "You shouldn't see this, but your profile picture couldn't load: " + e );
                     }
 
                 }

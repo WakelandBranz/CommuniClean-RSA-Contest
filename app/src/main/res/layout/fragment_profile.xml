@@ -18,6 +18,15 @@
                 android:layout_marginTop="22dp"
                 android:layout_marginLeft="15dp"
                 android:src="@drawable/tree_icon" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CommuniClean Profile"
+                android:textSize="30dp"
+                android:textColor="@color/colorWhite"
+                android:layout_toRightOf="@id/treeLogo"
+                android:layout_marginTop="32dp"
+                android:layout_marginLeft="26dp"/>
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
