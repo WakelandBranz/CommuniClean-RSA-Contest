@@ -67,7 +67,7 @@ public class ChatActivity extends AppCompatActivity {
     List<ModelChat> chatList;
     AdapterChat adapterChat;
 
-    private static final int IMAGEPICK_GALLERY_REQUEST = 300;
+    private static final int IMAGE_PICKGALLERY_REQUEST = 300;
     private static final int IMAGE_PICKCAMERA_REQUEST = 400;
     private static final int CAMERA_REQUEST = 100;
     private static final int STORAGE_REQUEST = 200;
@@ -286,12 +286,9 @@ public class ChatActivity extends AppCompatActivity {
             break;
             case STORAGE_REQUEST: {
                 if (grantResults.length > 0) {
-                    boolean writeStorageaccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (writeStorageaccepted) {
-                        pickFromGallery(); // if access granted then pick
-                    } else {
-                        Toast.makeText(this, "Please Enable Storage Permissions", Toast.LENGTH_LONG).show();
-                    }
+                    pickFromGallery();
+
+
                 }
             }
             break;
@@ -300,24 +297,26 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == IMAGEPICK_GALLERY_REQUEST) {
-                imageuri = data.getData(); // get image data to upload
-                try {
-                    sendImageMessage(imageuri);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (requestCode == IMAGE_PICKCAMERA_REQUEST) {
-                try {
-                    sendImageMessage(imageuri);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == IMAGE_PICKGALLERY_REQUEST && data != null) {
+                imageuri = data.getData();
+                try {
+                    sendImageMessage(imageuri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (requestCode == IMAGE_PICKCAMERA_REQUEST) {
+                try {
+                    sendImageMessage(imageuri);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else {
+            Log.d("ChatActivity", "Image selection cancelled or failed");
+        }
     }
 
     private void sendImageMessage(Uri imageuri) throws IOException {
@@ -414,9 +413,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void pickFromGallery() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK);
-        galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent, IMAGEPICK_GALLERY_REQUEST);
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(galleryIntent, IMAGE_PICKGALLERY_REQUEST);
     }
 
     private Boolean checkStoragePermission() {
