@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "43396603561",
-    "project_id": "communiclean-rsa",
-    "storage_bucket": "communiclean-rsa.appspot.com"
+    "project_number": "377938862273",
+    "firebase_url": "https://communiclean-rsa-two-default-rtdb.firebaseio.com",
+    "project_id": "communiclean-rsa-two",
+    "storage_bucket": "communiclean-rsa-two.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:43396603561:android:c5ea5be6e9f5aa5da153b8",
+        "mobilesdk_app_id": "1:377938862273:android:c0a0e923b17677f63a7440",
         "android_client_info": {
           "package_name": "com.example.communiclean"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD2UMdFaFox9WsuW5Fn37i9q2LBbYoxMW4"
+          "current_key": "AIzaSyB345lAQz33PsNj_b-ZgZzdFCCs1Vc6J8s"
         }
       ],
       "services": {
